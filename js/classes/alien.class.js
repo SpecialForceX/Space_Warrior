@@ -1,4 +1,6 @@
 class Alien extends MovableObject {
+    width = 64;
+    height = 64;
 
     IMAGES_WALKING = [
         '/img/enemys/alien1/alien_walk_1.png',
@@ -20,10 +22,7 @@ class Alien extends MovableObject {
         this.moveLeft();
 
         setInterval(() => {
-            let i = this.currentImg % this.IMAGES_WALKING.length;
-            let path = this.IMAGES_WALKING[i];
-            this.img = this.imgCache[path];
-            this.currentImg++;
+            this.playAnimation(this.IMAGES_WALKING);
         }, 1000/5)
     }
 }

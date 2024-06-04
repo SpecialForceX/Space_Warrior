@@ -26,11 +26,18 @@ class Player extends MovableObject {
         '/img/player/hurt/player_hurt_2.png'
     ]
 
+    IMAGES_SHOOT = [
+        '/img/player/shoot/player_shoot_1.png',
+        '/img/player/shoot/player_shoot_2.png',
+        '/img/player/shoot/player_shoot_3.png',
+        '/img/player/shoot/player_shoot_4.png'
+    ]
+
     world;
     speed = 4;
     y = 550;
     statusBar;
-    life = 4;
+    life = 10;
 
     constructor() {
         super().loadImg('/img/player/walk/player_walk_1.png');
@@ -39,6 +46,7 @@ class Player extends MovableObject {
         this.loadImgs(this.IMAGES_IDLE);
         this.loadImgs(this.IMAGES_DEAD);
         this.loadImgs(this.IMAGES_HURT);
+        this.loadImgs(this.IMAGES_SHOOT);
         this.applyGravity();
         this.animate();
         this.animateRotation();
@@ -58,7 +66,7 @@ class Player extends MovableObject {
                 this.mirrored = false;
             }
 
-            if (this.world.keyboard.LEFT && this.x > -2048 && this.isAlive) {
+            if (this.world.keyboard.LEFT && this.x > this.world.level.level_end_x_left && this.isAlive) {
                 this.moveLeft();
                 this.mirrored = true;
             }
@@ -83,6 +91,12 @@ class Player extends MovableObject {
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 1000 / 7)
+
+        setInterval(() => {
+            if (this.world.isShoot) {
+                this.playAnimation(this.IMAGES_SHOOT);
+            }
+        }, 1000 / 30)
     }
 
     animateRotation() {

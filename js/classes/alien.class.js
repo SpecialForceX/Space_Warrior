@@ -1,6 +1,7 @@
 class Alien extends MovableObject {
     width = 64;
     height = 64;
+    life = 2;
 
     IMAGES_WALKING = [
         '/img/enemys/alien1/alien_walk_1.png',
@@ -16,6 +17,7 @@ class Alien extends MovableObject {
         this.speed = 0.4 + Math.random() * 0.25;
 
         this.animate();
+        this.animateRotation();
     }
 
     animate() {
@@ -25,7 +27,21 @@ class Alien extends MovableObject {
         
 
         setInterval(() => {
-            this.playAnimation(this.IMAGES_WALKING);
+            if (this.isDead()) {
+                // this.playAnimation(this.IMAGES_DEAD);
+                this.isAlive = false;
+            } else {
+                this.playAnimation(this.IMAGES_WALKING);
+            }
         }, 1000/5)
+    }
+
+    animateRotation() {
+        setInterval(() => {
+            if (this.isDead()) {
+                this.updateRotation();
+                this.y -= 2;
+            }
+        }, 1000 / 30);
     }
 }

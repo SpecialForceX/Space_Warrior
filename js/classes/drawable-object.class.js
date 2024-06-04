@@ -5,7 +5,7 @@ class DrawableObject {
     x = 100;
     y = 640;
     height = 76;
-    width = 64;
+    width = 80;
 
 
     loadImg(path) {

@@ -3,9 +3,21 @@ class Level {
     dusts;
     backgroundObjects;
     groundObjects;
-    backgroundAmount = 4;
-    groundAmount = 6;
-    level_end_x = 3000;
+    heartObjects = [
+        new CollectableObject(100, 200, 28, 24, 'heart')
+    ]
+    crystalObjects = [
+        new CollectableObject(450, 400, 20, 40, 'crystal'),
+        new CollectableObject(500, 400, 20, 40, 'crystal'),
+        new CollectableObject(550, 400, 20, 40, 'crystal'),
+        new CollectableObject(600, 400, 20, 40, 'crystal'),
+        new CollectableObject(650, 400, 20, 40, 'crystal')
+    ]
+    trampolines = [];
+    boss = [];
+    backgroundAmount = 5;
+    groundAmount = 8;
+    level_end_x = 4250;
     level_end_x_left = -1800;
 
     constructor(enemies, dusts) {

@@ -37,7 +37,7 @@ class Player extends MovableObject {
     speed = 4;
     y = 550;
     statusBar;
-    life = 10;
+    life = 3;
 
     constructor() {
         super().loadImg('/img/player/walk/player_walk_1.png');
@@ -74,7 +74,10 @@ class Player extends MovableObject {
             if (this.world.keyboard.SPACE && !this.isInAir() && this.isAlive) {
                 this.jump();
             }
-            this.world.camera_x = -this.x + 200;
+            if(!world.cameraFixed) {
+                this.world.camera_x = -this.x + 200;
+            }
+
         }, 1000 / 60)
 
         setInterval(() => {

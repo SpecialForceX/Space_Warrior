@@ -9,9 +9,16 @@ class Alien extends MovableObject {
         '/img/enemys/alien1/alien_walk_3.png'
     ]
 
+    IMAGES_HURT = [
+        'img/enemys/alien1/hurt/alien1_hurt_2.png',
+        'img/enemys/alien1/hurt/alien1_hurt_1.png',
+        'img/enemys/alien1/hurt/alien1_hurt_3.png'
+    ]
+
     constructor() {
         super().loadImg('/img/enemys/alien1/alien_walk_1.png');
         this.loadImgs(this.IMAGES_WALKING);
+        this.loadImgs(this.IMAGES_HURT);
         this.x = 200 + Math.random() * 500;
 
         this.speed = 0.4 + Math.random() * 0.25;
@@ -28,12 +35,18 @@ class Alien extends MovableObject {
 
         setInterval(() => {
             if (this.isDead()) {
-                // this.playAnimation(this.IMAGES_DEAD);
                 this.isAlive = false;
             } else {
                 this.playAnimation(this.IMAGES_WALKING);
             }
-        }, 1000/5)
+        }, 1000/7)
+
+        setInterval(() => {
+            if (this.isHurt()) {
+                this.playAnimation(this.IMAGES_HURT);
+            }
+        }, 1000/15)
+
     }
 
     animateRotation() {

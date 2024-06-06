@@ -33,11 +33,23 @@ class Player extends MovableObject {
         '/img/player/shoot/player_shoot_4.png'
     ]
 
+    IMAGES_SLEEP = [
+        '/img/player/sleep/sleep_1.png',
+        '/img/player/sleep/sleep_1.png',
+        '/img/player/sleep/sleep_1.png',
+        '/img/player/sleep/sleep_2.png',
+        '/img/player/sleep/sleep_2.png',
+        '/img/player/sleep/sleep_1.png',
+        '/img/player/sleep/sleep_1.png',
+        '/img/player/sleep/sleep_1.png'
+    ]
+
     world;
     speed = 4;
     y = 550;
     statusBar;
     life = 3;
+    sleepCounter = 0;
 
     constructor() {
         super().loadImg('/img/player/walk/player_walk_1.png');
@@ -47,11 +59,13 @@ class Player extends MovableObject {
         this.loadImgs(this.IMAGES_DEAD);
         this.loadImgs(this.IMAGES_HURT);
         this.loadImgs(this.IMAGES_SHOOT);
+        this.loadImgs(this.IMAGES_SLEEP);
         this.applyGravity();
         this.animate();
         this.animateRotation();
         this.statusBar = this.duplicateLifeObjects(this.life);
         this.updateLife();
+        this.sleep();
     }
 
     updateLife() {
@@ -90,6 +104,8 @@ class Player extends MovableObject {
                 this.playAnimation(this.IMAGES_JUMPING);
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.IMAGES_WALKING);
+            } else if (this.sleepCounter > 10) {
+                this.playAnimation(this.IMAGES_SLEEP);
             } else {
                 this.playAnimation(this.IMAGES_IDLE);
             }
@@ -100,6 +116,7 @@ class Player extends MovableObject {
                 this.playAnimation(this.IMAGES_SHOOT);
             }
         }, 1000 / 30)
+
     }
 
     animateRotation() {
@@ -110,5 +127,14 @@ class Player extends MovableObject {
             }
         }, 1000 / 30);
     }
-    
+
+    sleep() {
+        setInterval(() => {
+            if(!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.world.keyboard.ENTER) {
+                this.sleepCounter += 1;
+            } else {
+                this.sleepCounter = 0;
+            }
+        }, 1000 / 2)
+    }
 }

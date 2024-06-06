@@ -125,7 +125,7 @@ class World {
             this.level.level_end_x_left = 3300;
             if (!this.bossRoomSet) {
                 this.level.trampolines.push(new Trampoline(4250, 644));
-                this.level.boss.push(new Boss(3650, 800, 380, 165));
+                this.level.boss.push(new Boss(3650, 800, 380, 415));
             }
             this.bossRoomSet = true;
         }

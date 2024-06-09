@@ -13,11 +13,7 @@ class World {
     cameraFixed = false;
     bossRoomSet = false;
     parallaxFactor = 0.25; // Parallax-Faktor für Hintergrundobjekte
-    platforms = [
-        new Platform(400, 450, 320, 256, 'img/background/ground/platform.png'),
-        new Platform(600, 600, 320, 256, 'img/background/ground/platform.png'),
-        new Platform(3300, 600, 192, 256, 'img/background/ground/platform_boss.png')
-    ]; // Array für Plattformen
+
 
 
 
@@ -27,6 +23,7 @@ class World {
 
         this.canvas = canvas;
         this.keyboard = keyboard;
+
 
         this.draw();
         this.setWorld();
@@ -125,6 +122,7 @@ class World {
             this.level.level_end_x_left = 3300;
             if (!this.bossRoomSet) {
                 this.level.trampolines.push(new Trampoline(4250, 644));
+                this.level.trampolines.push(new Trampoline(3310, 644));
                 this.level.boss.push(new Boss(3650, 800, 380, 415));
             }
             this.bossRoomSet = true;
@@ -148,7 +146,7 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.boss);
-        this.addObjectsToMap(this.platforms); // Plattformen hinzufügen
+        this.addObjectsToMap(this.level.platforms); // Plattformen hinzufügen
         this.addObjectsToMap(this.level.groundObjects);
 
         this.ctx.translate(-this.camera_x, 0); // Back
@@ -159,10 +157,12 @@ class World {
         this.addObjectsToMap(this.level.heartObjects);
         this.addObjectsToMap(this.level.crystalObjects);
         this.addObjectsToMap(this.level.trampolines);
+        this.addObjectsToMap(this.level.meteorites);
         this.addToMap(this.player);
 
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObjects);
+
 
 
         this.ctx.translate(-this.camera_x, 0);

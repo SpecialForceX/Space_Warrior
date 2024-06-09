@@ -36,21 +36,19 @@ class MovableObject extends DrawableObject {
     }
     
     isInAir() {
-        // Überprüfe, ob der Spieler mit einer Plattform kollidiert
-        for (let platform of this.world.platforms) {
+        for (let platform of world.level.platforms) {
             if (this.isStandingOn(platform)) {
                 return false;
             }
         }
-    
-        // Überprüfe, ob der Spieler auf dem Boden ist
         return Math.round(this.y) < 635;
     }
     
+
     isStandingOn(platform) {
-        const playerFeetY = this.y + this.height - this.offsetY;
+        const objFeetY = this.y + this.height - this.offsetY;
         return this.x + this.width > platform.x && this.x < platform.x + platform.width &&
-               playerFeetY >= platform.y && playerFeetY <= platform.y + 16; // Nur die obersten 6 Pixel
+               objFeetY >= platform.y && objFeetY <= platform.y + 16; // Nur die obersten 6 Pixel
     }
 
     rotateImage(ctx) {

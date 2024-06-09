@@ -44,11 +44,10 @@ class Player extends MovableObject {
         '/img/player/sleep/sleep_1.png'
     ]
 
-    world;
     speed = 4;
     y = 550;
     statusBar;
-    life = 3;
+    life = 20;
     sleepCounter = 0;
 
     constructor() {

@@ -15,17 +15,19 @@ class Alien extends MovableObject {
         'img/enemys/alien1/hurt/alien1_hurt_3.png'
     ]
 
-    constructor() {
+    constructor(x, y) {
         super().loadImg('/img/enemys/alien1/alien_walk_1.png');
         this.loadImgs(this.IMAGES_WALKING);
         this.loadImgs(this.IMAGES_HURT);
-        this.x = 200 + Math.random() * 500;
-
+        this.x = x;
+        this.y = y;
         this.speed = 0.4 + Math.random() * 0.25;
 
         this.animate();
         this.animateRotation();
+        this.enableGravityFunction();
     }
+
 
     animate() {
         setInterval(() => {
@@ -57,4 +59,11 @@ class Alien extends MovableObject {
             }
         }, 1000 / 30);
     }
+
+    enableGravityFunction() {
+        setTimeout(() => {
+            this.applyGravity();
+        }, 100);
+    }
+
 }

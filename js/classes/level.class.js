@@ -20,7 +20,9 @@ class Level {
     ]; // Array für Plattformen
     trampolines = [];
     boss = [];
+    shield = [];
     meteorites = [];
+    healthbar = [];
     backgroundAmount = 5;
     groundAmount = 8;
     level_end_x = 4250;

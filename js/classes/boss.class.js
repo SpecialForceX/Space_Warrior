@@ -14,6 +14,19 @@ class Boss extends MovableObject {
         'img/enemys/boss/energy_beam/energy_beam_3.png'
     ];
 
+    IMAGES_DIED = [
+        'img/enemys/boss/explosion/boss_explosion_1.png',
+        'img/enemys/boss/explosion/boss_explosion_2.png',
+        'img/enemys/boss/explosion/boss_explosion_3.png',
+        'img/enemys/boss/explosion/boss_explosion_4.png',
+        'img/enemys/boss/explosion/boss_explosion_5.png',
+        'img/enemys/boss/explosion/boss_explosion_6.png',
+        'img/enemys/boss/explosion/boss_explosion_7.png',
+        'img/enemys/boss/explosion/boss_explosion_8.png',
+        'img/enemys/boss/explosion/boss_explosion_9.png'
+    ]
+
+
     introDone = false;
     bossRoutine = false;
     speed = 2;
@@ -35,6 +48,7 @@ class Boss extends MovableObject {
     isAttackingAlienDrop = false;
     alienDropCounter = 0;
     alienDropMax = 6;
+    life = 5;
 
     constructor(x, y, width, height) {
         super().loadImg('img/enemys/boss/boss_intro_1.png');
@@ -44,14 +58,22 @@ class Boss extends MovableObject {
         this.height = height;
         this.loadImgs(this.IMAGES_INTRO);
         this.loadImgs(this.IMAGES_BEAM);
+        this.loadImgs(this.IMAGES_DIED);
         this.animate();
         this.startIntro();
+        this.bossRush();
+        this.offsetRight = 20;
+        this.offsetLeft = 20;
+        this.offsetTop = 40;
+        this.offsetBottom = 270;
     }
 
     animate() {
         setInterval(() => {
-            if (this.energyBeamOn) {
+            if (this.energyBeamOn && this.isAlive) {
                 this.playAnimation(this.IMAGES_BEAM);
+            } else if (!this.isAlive) {
+                this.playAnimation(this.IMAGES_DIED);
             } else {
                 this.playAnimation(this.IMAGES_INTRO);
             }
@@ -65,6 +87,7 @@ class Boss extends MovableObject {
             } else {
                 this.introDone = true;
                 this.bossRoutine = true;
+                world.level.shield.push(new Shield(3650, 800, 435, 230));
                 clearInterval(introInterval); // Stoppe das Intro
                 this.startBossRoutine(); // Starte die Boss-Routine
             }
@@ -108,43 +131,53 @@ class Boss extends MovableObject {
     }
 
     moveTowardsRandomTarget() {
-        if (this.x < this.randomTargetX) {
-            this.x += this.speed;
-        } else if (this.x > this.randomTargetX) {
-            this.x -= this.speed;
-        }
-
-        if (this.y < this.randomTargetY) {
-            this.y += this.speed;
-        } else if (this.y > this.randomTargetY) {
-            this.y -= this.speed;
-        }
-
-        // Wenn das Ziel erreicht ist, ein neues Ziel setzen
-        if (Math.abs(this.x - this.randomTargetX) < this.speed && Math.abs(this.y - this.randomTargetY) < this.speed) {
-            if (!this.isAttackingAlienDrop) {
-                this.setRandomTarget();
+        if (this.isAlive) {
+            if (this.x < this.randomTargetX) {
+                this.x += this.speed;
+            } else if (this.x > this.randomTargetX) {
+                this.x -= this.speed;
             }
+
+            if (this.y < this.randomTargetY) {
+                this.y += this.speed;
+            } else if (this.y > this.randomTargetY) {
+                this.y -= this.speed;
+            }
+
+            // Wenn das Ziel erreicht ist, ein neues Ziel setzen
+            if (Math.abs(this.x - this.randomTargetX) < this.speed && Math.abs(this.y - this.randomTargetY) < this.speed) {
+                if (!this.isAttackingAlienDrop) {
+                    this.setRandomTarget();
+                }
+            }
+
+            world.level.shield.forEach(shield => shield.updatePositionShield());
         }
     }
 
     moveToTarget(targetX, targetY) {
-        if (this.x < targetX) {
-            this.x += this.speed;
-        } else if (this.x > targetX) {
-            this.x -= this.speed;
-        }
+        if (this.isAlive) {
 
-        if (this.y < targetY) {
-            this.y += this.speed;
-        } else if (this.y > targetY) {
-            this.y -= this.speed;
-        }
 
-        if (Math.abs(this.x - targetX) < this.speed && Math.abs(this.y - targetY) < this.speed) {
-            this.state = 'idle';
-            this.isAttacking = true;
-            this.onReachTarget();
+            if (this.x < targetX) {
+                this.x += this.speed;
+            } else if (this.x > targetX) {
+                this.x -= this.speed;
+            }
+
+            if (this.y < targetY) {
+                this.y += this.speed;
+            } else if (this.y > targetY) {
+                this.y -= this.speed;
+            }
+
+            if (Math.abs(this.x - targetX) < this.speed && Math.abs(this.y - targetY) < this.speed) {
+                this.state = 'idle';
+                this.isAttacking = true;
+                this.onReachTarget();
+            }
+
+            world.level.shield.forEach(shield => shield.updatePositionShield());
         }
     }
 
@@ -154,7 +187,7 @@ class Boss extends MovableObject {
     }
 
     startAttacking() {
-        const attackType = Math.floor(Math.random() * 3); // Wähle eine zufällige Attacke aus 3 möglichen 
+        const attackType = 0; // Wähle eine zufällige Attacke aus 3 möglichen Math.floor(Math.random() * 3)
         this.executeAttack(attackType);
     }
 
@@ -173,37 +206,45 @@ class Boss extends MovableObject {
     }
 
     attackType1() {
-        console.log('Boss führt Attacke 1 aus.');
-        this.isAttackingEnergyBeam = true;
-        const energyBeamIntervall = setInterval(() => {
-            this.energyBeam();
-            if (!this.isAttackingEnergyBeam) {
-                clearInterval(energyBeamIntervall);
-            }
-        }, 1000 / 60);
+        if (this.isAlive) {
+            console.log('Boss führt Attacke 1 aus.');
+            this.isAttackingEnergyBeam = true;
+            const energyBeamIntervall = setInterval(() => {
+                this.energyBeam();
+                if (!this.isAttackingEnergyBeam) {
+                    clearInterval(energyBeamIntervall);
+                }
+            }, 1000 / 60);
+        }
     }
 
     attackType2() {
-        console.log('Boss führt Attacke 2 aus.');
-        this.speed = 10;
-        const meteoriteAttackInterval1 = setInterval(() => {
-            if (this.x < 5000) {
-                this.x += this.speed;
-            } else {
-                this.meteoriteAttack();
-                clearInterval(meteoriteAttackInterval1);
-            }
-        }, 1000 / 60)
-
+        if (this.isAlive) {
+            console.log('Boss führt Attacke 2 aus.');
+            this.speed = 10;
+            const meteoriteAttackInterval1 = setInterval(() => {
+                if (this.x < 5000) {
+                    world.level.shield.forEach(shield => shield.updatePositionShield());
+                    this.x += this.speed;
+                } else {
+                    this.meteoriteAttack();
+                    clearInterval(meteoriteAttackInterval1);
+                }
+            }, 1000 / 60)
+        }
 
     }
 
     attackType3() {
-        console.log('Boss führt Attacke 3 aus.');
-        this.isAttackingAlienDrop = true;
-        this.alienDropCounter = 0;
-        this.speed = this.increasedSpeed;
-        this.alienDrop();
+        if (this.isAlive) {
+
+
+            console.log('Boss führt Attacke 3 aus.');
+            this.isAttackingAlienDrop = true;
+            this.alienDropCounter = 0;
+            this.speed = this.increasedSpeed;
+            this.alienDrop();
+        }
     }
 
     finishAttack() {
@@ -216,27 +257,38 @@ class Boss extends MovableObject {
     }
 
     energyBeam() {
-        this.targetBeamX = 4050;
-        this.targetBeamY = 310;
-        if (this.x < this.targetBeamX && !this.energyBeamOn) {
-            this.x += this.speed;
-        }
+        if (this.isAlive) {
+            this.targetBeamX = 4050;
+            this.targetBeamY = 310;
+            world.level.shield.forEach(shield => shield.updatePositionShield());
+            if (this.x < this.targetBeamX && !this.energyBeamOn) {
+                this.x += this.speed;
+            }
 
-        if (this.y < this.targetBeamY && !this.energyBeamOn) {
-            this.y += this.speed;
-        }
+            if (this.y < this.targetBeamY && !this.energyBeamOn) {
+                this.y += this.speed;
+            }
 
-        if (Math.abs(this.x - this.targetBeamX) < this.speed && Math.abs(this.y - this.targetBeamY) < this.speed) {
-            console.log('Attack Position arrived');
-            this.isAttacking = false;
-            this.energyBeamOn = true;
-        }
+            if (Math.abs(this.x - this.targetBeamX) < this.speed && Math.abs(this.y - this.targetBeamY) < this.speed) {
+                console.log('Attack Position arrived');
+                this.isAttacking = false;
+                this.energyBeamOn = true;
+            }
 
-        if (this.energyBeamOn) {
-            this.x -= 1;
-            if (this.x < 3200) {
-                this.isAttackingEnergyBeam = false;
-                this.finishAttack();
+            if (this.energyBeamOn) {
+                this.offsetRight = 100;
+                this.offsetLeft = 100;
+                this.offsetTop = 40;
+                this.offsetBottom = 0;
+                this.x -= 2;
+                if (this.x < 3200) {
+                    this.isAttackingEnergyBeam = false;
+                    this.offsetRight = 20;
+                    this.offsetLeft = 20;
+                    this.offsetTop = 40;
+                    this.offsetBottom = 270;
+                    this.finishAttack();
+                }
             }
         }
     }
@@ -245,6 +297,7 @@ class Boss extends MovableObject {
         world.level.meteoriteAttack = true;
         this.meteoriteAttackCounter = 15;
         const meteoriteAttackInterval = setInterval(() => {
+
             this.meteoriteAttackCounter -= 1
             if (this.meteoriteAttackCounter <= 0) {
 
@@ -252,6 +305,7 @@ class Boss extends MovableObject {
 
                 const returnToTargetInterval = setInterval(() => {
                     if (this.x > this.targetX) {
+                        world.level.shield.forEach(shield => shield.updatePositionShield());
                         this.x -= this.speed;
                     } else {
                         this.finishAttack();
@@ -291,5 +345,14 @@ class Boss extends MovableObject {
             this.speed = 2;
         }
     }
+
+    bossRush() {
+        setInterval(() => {
+            if (this.life < 2) {
+                this.speed = 3;
+            }
+        }, 1000 / 60);
+    }
+
 
 }

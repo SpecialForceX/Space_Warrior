@@ -26,6 +26,11 @@ class Alien extends MovableObject {
         this.animate();
         this.animateRotation();
         this.enableGravityFunction();
+
+        this.offsetRight = 10;
+        this.offsetLeft = 10;
+        this.offsetTop = 10;
+        this.offsetBottom = 0;
     }
 
 

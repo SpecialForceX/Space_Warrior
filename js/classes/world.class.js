@@ -74,7 +74,7 @@ class World {
                 this.player.statusBar = [];
                 this.player.updateLife();
             }
-
+    
             this.throwableObjects.forEach((bullet) => {
                 if (enemy.isColliding(bullet) && !enemy.isHurt() && !bullet.exploding) {
                     enemy.hit();
@@ -82,34 +82,69 @@ class World {
                 }
             });
         });
-
+    
+        this.level.shield.forEach((shield) => {
+            this.throwableObjects.forEach((bullet) => {
+                if (shield.isColliding(bullet) && !shield.isInvulnerable && !bullet.exploding) {
+                    shield.hitByBullet(); // Shield getroffen
+                    bullet.hit(); // Triff die Bullet und starte die Explosion
+                }
+            });
+        });
+    
         this.level.heartObjects.forEach((heart) => {
             if (this.player.isColliding(heart)) {
                 heart.destroy();
                 this.player.life += 1;
                 this.player.updateLife();
             }
-        })
-
+        });
+    
         this.level.crystalObjects.forEach((crystal) => {
             if (this.player.isColliding(crystal)) {
                 crystal.destroy();
             }
-        })
-
+        });
+    
         this.level.trampolines.forEach((trampoline) => {
             if (this.player.isColliding(trampoline)) {
                 this.player.speedY = 18;
             }
-        })
+        });
+    
+        this.level.boss.forEach((bossObject) => {
+            if (this.player.isColliding(bossObject) && !this.player.isHurt()) {
+                this.player.hit();
+                console.log('Collision with Player, life:', this.player.life);
+                this.player.statusBar = [];
+                this.player.updateLife();
+            }
+    
+            this.throwableObjects.forEach((bullet) => {
+                if (bossObject.isColliding(bullet) && !bossObject.isHurt() && !bullet.exploding) {
+                    if (this.level.shield.length === 0) {
+                        bossObject.hit();
+                        bullet.hit(); // Triff die Bullet und starte die Explosion
+                        console.log(this.level.boss[0].life);
+                        if (this.level.boss[0].isAlive) {
+                            setTimeout(() => {
+                                this.level.shield.push(new Shield(bossObject.x, bossObject.y, 435, 230));   
+                            }, 1000);
+                        }
 
 
+                    } else if (!this.level.shield[0].isInvulnerable) {
+                        this.level.shield[0].hitByBullet();
+                        bullet.hit(); // Triff die Bullet und starte die Explosion
+                    }
+                }
+            });
+        });
+    
         // Entferne die getroffenen Bullets aus dem `throwableObjects`-Array
         this.level.crystalObjects = this.level.crystalObjects.filter(crystal => !crystal.isMarkedForRemoval);
         this.level.heartObjects = this.level.heartObjects.filter(heart => !heart.isMarkedForRemoval);
         this.throwableObjects = this.throwableObjects.filter(bullet => !bullet.isMarkedForRemoval);
-
-
     }
 
     wait(ms) {
@@ -117,13 +152,14 @@ class World {
     }
 
     checkCameraFixed() {
-        if(this.cameraFixed) {
+        if (this.cameraFixed) {
             this.camera_x = -3300;
             this.level.level_end_x_left = 3300;
             if (!this.bossRoomSet) {
                 this.level.trampolines.push(new Trampoline(4250, 644));
                 this.level.trampolines.push(new Trampoline(3310, 644));
                 this.level.boss.push(new Boss(3650, 800, 380, 415));
+                this.level.healthbar.push(new StatusBar(3500, 100, 624, 56, 'boss'));
             }
             this.bossRoomSet = true;
         }
@@ -135,7 +171,7 @@ class World {
         // Begrenzung der Kamera
         if (this.player.x >= 3500) {
             this.cameraFixed = true;
-        } 
+        }
 
         // Zeichne Hintergrundobjekte mit Parallax-Effekt
         this.ctx.translate(this.camera_x * this.parallaxFactor, 0);
@@ -145,7 +181,9 @@ class World {
 
 
         this.ctx.translate(this.camera_x, 0);
+        this.addObjectsToMap(this.level.healthbar);
         this.addObjectsToMap(this.level.boss);
+        this.addObjectsToMap(this.level.shield);
         this.addObjectsToMap(this.level.platforms); // Plattformen hinzufügen
         this.addObjectsToMap(this.level.groundObjects);
 

@@ -47,7 +47,7 @@ class Player extends MovableObject {
     speed = 4;
     y = 550;
     statusBar;
-    life = 20;
+    life = 3;
     sleepCounter = 0;
 
     constructor() {
@@ -65,6 +65,10 @@ class Player extends MovableObject {
         this.statusBar = this.duplicateLifeObjects(this.life);
         this.updateLife();
         this.sleep();
+        this.offsetRight = 28;
+        this.offsetLeft = 10;
+        this.offsetTop = 10;
+        this.offsetBottom = 10;
     }
 
     updateLife() {

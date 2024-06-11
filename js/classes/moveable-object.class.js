@@ -8,13 +8,18 @@ class MovableObject extends DrawableObject {
     isAlive = true;
     rotationAngle = 0;
     offsetY = 9;
+    offsetTop = 0;
+    offsetBottom = 0;
+    offsetLeft = 0;
+    offsetRight = 0;
 
 
     duplicateLifeObjects(life) {
         let duplicateLifeObjectsArray = [];
-        let pos_x = 50;
+        let pos_x = 20;
+        let pos_y = 20;
         for (let i = 0; i < life; i++) {
-            duplicateLifeObjectsArray.push(new StatusBar(pos_x));
+            duplicateLifeObjectsArray.push(new StatusBar(pos_x, pos_y, 64, 64, 'player'));
             pos_x += 30;
         }
         return duplicateLifeObjectsArray;
@@ -62,16 +67,17 @@ class MovableObject extends DrawableObject {
 
 
     isColliding(obj) {
-        return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
-            (this.y + this.height) >= obj.y &&
-            (this.y) <= (obj.y + obj.height)
-        //obj.onCollisionCourse; // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+        return  (this.x + this.width - this.offsetRight) >= (obj.x + obj.offsetLeft) && 
+        (this.x + this.offsetLeft) <= (obj.x + obj.width - obj.offsetRight) && 
+        (this.y + this.height - this.offsetBottom) >= (obj.y + obj.offsetTop) && 
+        (this.y + this.offsetTop) <= (obj.y + obj.height - obj.offsetBottom); 
     }
 
     hit() {
         this.life -= 1;
-        if (this.life < 0) {
+        if (this.life <= 0) {
             this.life = 0;
+            this.isAlive = false;
         } else {
             this.lastHit = new Date().getTime();
         }

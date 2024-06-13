@@ -106,6 +106,7 @@ class Level {
 
     initializeMeteorites() {
         setInterval(() => {
+            if (!gameStarted || gamePaused) return; 
             const currentTime = Date.now();
 
             if (currentTime - this.startTime >= this.moveDuration) {
@@ -121,6 +122,7 @@ class Level {
     }
 
     updateMeteorites() {
+        if (!gameStarted || gamePaused) return;
         this.meteorites.forEach(meteorite => {
             meteorite.move();
         });

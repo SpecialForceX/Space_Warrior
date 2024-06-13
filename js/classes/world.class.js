@@ -17,28 +17,28 @@ class World {
     bossRoomSet = false;
     parallaxFactor = 0.25; // Parallax-Faktor für Hintergrundobjekte
     alienPattern = [
-        [0,0,0,0,'C','C','C',0,0,0,0],
-        [0,0,0,'C','C','C','C','C',0,0,0],
-        [0,0,'C','C','C','C','C','C','C',0,0],
-        [0,0,'C','C','C','C','C','C','C',0,0],
-        [0,0,'C','C','C','C','C','C','C',0,0],
-        [0,'C','C','C','C','C','C','C','C','C',0],
-        ['C','C','C','C','C','C','C','C','C','C','C'],
-        [0,0,0,0,'H','H','H',0,0,0,0],
-        [0,0,0,0,0,'H',0,0,0,0,0],
+        [0, 0, 0, 0, 'C', 'C', 'C', 0, 0, 0, 0],
+        [0, 0, 0, 'C', 'C', 'C', 'C', 'C', 0, 0, 0],
+        [0, 0, 'C', 'C', 'C', 'C', 'C', 'C', 'C', 0, 0],
+        [0, 0, 'C', 'C', 'C', 'C', 'C', 'C', 'C', 0, 0],
+        [0, 0, 'C', 'C', 'C', 'C', 'C', 'C', 'C', 0, 0],
+        [0, 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 0],
+        ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'],
+        [0, 0, 0, 0, 'H', 'H', 'H', 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 'H', 0, 0, 0, 0, 0],
     ];
     skullPattern = [
-        [0,0,'C','C','C','C','C',0,0],
-        [0,'C','C','C','C','C','C','C',0],
-        [0,'C',0,0,'C',0,0, 'C',0],
-        [0,'C','C','C','C','C','C','C',0],
-        [0,0,'C','C','C','C','C',0,0],
-        [0,0,'C',0,'C',0,'C',0,0],
-        ['C',0,0,0,0,0,0,0,'C'],
-        ['C','C','C',0,0,0,'C','C','C'],
-        [0,0,0,'C','C','C',0,0,0],
-        ['C','C','C',0,0,0,'C','C','C'],
-        ['C',0,0,0,0,0,0,0,'C']
+        [0, 0, 'C', 'C', 'C', 'C', 'C', 0, 0],
+        [0, 'C', 'C', 'C', 'C', 'C', 'C', 'C', 0],
+        [0, 'C', 0, 0, 'C', 0, 0, 'C', 0],
+        [0, 'C', 'C', 'C', 'C', 'C', 'C', 'C', 0],
+        [0, 0, 'C', 'C', 'C', 'C', 'C', 0, 0],
+        [0, 0, 'C', 0, 'C', 0, 'C', 0, 0],
+        ['C', 0, 0, 0, 0, 0, 0, 0, 'C'],
+        ['C', 'C', 'C', 0, 0, 0, 'C', 'C', 'C'],
+        [0, 0, 0, 'C', 'C', 'C', 0, 0, 0],
+        ['C', 'C', 'C', 0, 0, 0, 'C', 'C', 'C'],
+        ['C', 0, 0, 0, 0, 0, 0, 0, 'C']
     ]
 
 
@@ -66,10 +66,12 @@ class World {
 
     run() {
         setInterval(() => {
-            this.checkCollisions();
-            this.checkShoot();
-            this.checkCameraFixed();
-            this.checkEnemiesInitalization();
+            if (gameStarted && !gamePaused) {
+                this.checkCollisions();
+                this.checkShoot();
+                this.checkCameraFixed();
+                this.checkEnemiesInitalization();
+            }
         }, 1000 / 60)
     }
 
@@ -111,7 +113,7 @@ class World {
                 this.player.statusBar = [];
                 this.player.updateLife();
             }
-    
+
             this.throwableObjects.forEach((bullet) => {
                 if (enemy.isColliding(bullet) && !enemy.isHurt() && !bullet.exploding) {
                     enemy.hit();
@@ -119,7 +121,7 @@ class World {
                 }
             });
         });
-    
+
         this.level.shield.forEach((shield) => {
             this.throwableObjects.forEach((bullet) => {
                 if (shield.isColliding(bullet) && !shield.isInvulnerable && !bullet.exploding) {
@@ -128,7 +130,7 @@ class World {
                 }
             });
         });
-    
+
         this.level.heartObjects.forEach((heart) => {
             if (this.player.isColliding(heart)) {
                 heart.destroy();
@@ -156,13 +158,13 @@ class World {
                 this.crystalCounter.increment(); // Kristallzähler erhöhen
             }
         });
-    
+
         this.level.trampolines.forEach((trampoline) => {
             if (this.player.isColliding(trampoline)) {
                 this.player.speedY = 18;
             }
         });
-    
+
         this.level.boss.forEach((bossObject) => {
             if (this.player.isColliding(bossObject) && !this.player.isHurt()) {
                 this.player.hit();
@@ -170,7 +172,7 @@ class World {
                 this.player.statusBar = [];
                 this.player.updateLife();
             }
-    
+
             this.throwableObjects.forEach((bullet) => {
                 if (bossObject.isColliding(bullet) && !bossObject.isHurt() && !bullet.exploding && this.level.boss[0].introDone) {
                     if (this.level.shield.length === 0) {
@@ -179,7 +181,7 @@ class World {
                         console.log(this.level.boss[0].life);
                         if (this.level.boss[0].isAlive) {
                             setTimeout(() => {
-                                this.level.shield.push(new Shield(bossObject.x, bossObject.y, 435, 230));   
+                                this.level.shield.push(new Shield(bossObject.x, bossObject.y, 435, 230));
                             }, 1000);
                         }
 
@@ -205,7 +207,7 @@ class World {
                 }
             });
         });
-    
+
         // Entferne die getroffenen Bullets aus dem `throwableObjects`-Array
         this.level.crystalObjects = this.level.crystalObjects.filter(crystal => !crystal.isMarkedForRemoval);
         this.level.heartObjects = this.level.heartObjects.filter(heart => !heart.isMarkedForRemoval);
@@ -231,6 +233,7 @@ class World {
     }
 
     draw() {
+        if (!gameStarted) return; // Zeichnen nur wenn das Spiel gestartet wurde
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Begrenzung der Kamera
@@ -313,14 +316,14 @@ class World {
         this.ctx.restore();
     }
 
-    
+
 
     createEasterEgg(pattern, x, y) {
         const startX = x;
         const startY = y;
         const gridSize = 50;
 
-    
+
         for (let row = 0; row < pattern.length; row++) {
             for (let col = 0; col < pattern[row].length; col++) {
                 if (pattern[row][col] === 'C') {

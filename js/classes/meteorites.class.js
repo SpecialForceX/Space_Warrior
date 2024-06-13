@@ -46,6 +46,7 @@ class Meteorites extends MovableObject {
     }
 
     move() {
+        if (!gameStarted || gamePaused) return; 
         this.x += this.speedX;
         this.y += this.speedY;
 

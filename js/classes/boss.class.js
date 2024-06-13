@@ -49,6 +49,8 @@ class Boss extends MovableObject {
     alienDropCounter = 0;
     alienDropMax = 6;
     life = 5;
+    isBeamProtectionSet = false;
+    
 
     constructor(x, y, width, height) {
         super().loadImg('img/enemys/boss/boss_intro_1.png');
@@ -130,6 +132,7 @@ class Boss extends MovableObject {
         }
     }
 
+
     moveTowardsRandomTarget() {
         if (this.isAlive) {
             if (this.x < this.randomTargetX) {
@@ -187,7 +190,7 @@ class Boss extends MovableObject {
     }
 
     startAttacking() {
-        const attackType = 0; // Wähle eine zufällige Attacke aus 3 möglichen Math.floor(Math.random() * 3)
+        const attackType = Math.floor(Math.random() * 3); // Wähle eine zufällige Attacke aus 3 möglichen 
         this.executeAttack(attackType);
     }
 
@@ -250,6 +253,7 @@ class Boss extends MovableObject {
     finishAttack() {
         setTimeout(() => {
             this.energyBeamOn = false;
+            this.isBeamProtectionSet = false;
             this.state = 'moving';
             this.startTime = Date.now();
             this.setRandomTarget();
@@ -276,10 +280,15 @@ class Boss extends MovableObject {
             }
 
             if (this.energyBeamOn) {
+                if (!this.isBeamProtectionSet) {
+                    world.level.beamProtection.push(new EnergieBeamProtection(this.x + 95, this.y + 150));
+                    this.isBeamProtectionSet = true;
+                }
                 this.offsetRight = 100;
                 this.offsetLeft = 100;
                 this.offsetTop = 40;
                 this.offsetBottom = 0;
+                world.level.beamProtection[0].x -= 2;
                 this.x -= 2;
                 if (this.x < 3200) {
                     this.isAttackingEnergyBeam = false;
@@ -288,6 +297,7 @@ class Boss extends MovableObject {
                     this.offsetTop = 40;
                     this.offsetBottom = 270;
                     this.finishAttack();
+                    world.level.beamProtection.splice(0, 1);
                 }
             }
         }

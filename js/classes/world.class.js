@@ -2,17 +2,44 @@ class World {
 
     player = new Player();
     level = level1;
+    crystalCounter = new CrystalCounter();
+    controlsIngame = new ControlsIngame(50, 100, 552, 316);
 
     canvas;
     ctx;
     keyboard;
     camera_x = 0;
+    setEnemies = false;
     throwableObjects = [];
     cooldown = 0;
     isShoot = false;
     cameraFixed = false;
     bossRoomSet = false;
     parallaxFactor = 0.25; // Parallax-Faktor für Hintergrundobjekte
+    alienPattern = [
+        [0,0,0,0,'C','C','C',0,0,0,0],
+        [0,0,0,'C','C','C','C','C',0,0,0],
+        [0,0,'C','C','C','C','C','C','C',0,0],
+        [0,0,'C','C','C','C','C','C','C',0,0],
+        [0,0,'C','C','C','C','C','C','C',0,0],
+        [0,'C','C','C','C','C','C','C','C','C',0],
+        ['C','C','C','C','C','C','C','C','C','C','C'],
+        [0,0,0,0,'H','H','H',0,0,0,0],
+        [0,0,0,0,0,'H',0,0,0,0,0],
+    ];
+    skullPattern = [
+        [0,0,'C','C','C','C','C',0,0],
+        [0,'C','C','C','C','C','C','C',0],
+        [0,'C',0,0,'C',0,0, 'C',0],
+        [0,'C','C','C','C','C','C','C',0],
+        [0,0,'C','C','C','C','C',0,0],
+        [0,0,'C',0,'C',0,'C',0,0],
+        ['C',0,0,0,0,0,0,0,'C'],
+        ['C','C','C',0,0,0,'C','C','C'],
+        [0,0,0,'C','C','C',0,0,0],
+        ['C','C','C',0,0,0,'C','C','C'],
+        ['C',0,0,0,0,0,0,0,'C']
+    ]
 
 
 
@@ -29,6 +56,8 @@ class World {
         this.setWorld();
         this.run();
         this.checkCooldown();
+        this.createEasterEgg(this.alienPattern, -1500, 50);
+        this.createEasterEgg(this.skullPattern, 2900, 50);
     }
 
     setWorld() {
@@ -40,7 +69,15 @@ class World {
             this.checkCollisions();
             this.checkShoot();
             this.checkCameraFixed();
+            this.checkEnemiesInitalization();
         }, 1000 / 60)
+    }
+
+    checkEnemiesInitalization() {
+        if (this.player.x > 700 && !this.setEnemies) {
+            this.level.initializeEnemys();
+            this.setEnemies = true;
+        }
     }
 
     checkCooldown() {
@@ -99,10 +136,24 @@ class World {
                 this.player.updateLife();
             }
         });
-    
+
+        this.throwableObjects.forEach((bullet) => {
+            if (this.level.boss.length > 0) {
+                if (this.level.boss[0].isBeamProtectionSet) {
+                    this.level.beamProtection.forEach((protection) => {
+                        if (protection.isColliding(bullet)) {
+                            bullet.hit();
+                        }
+                    });
+                }
+            }
+
+        });
+
         this.level.crystalObjects.forEach((crystal) => {
             if (this.player.isColliding(crystal)) {
                 crystal.destroy();
+                this.crystalCounter.increment(); // Kristallzähler erhöhen
             }
         });
     
@@ -121,7 +172,7 @@ class World {
             }
     
             this.throwableObjects.forEach((bullet) => {
-                if (bossObject.isColliding(bullet) && !bossObject.isHurt() && !bullet.exploding) {
+                if (bossObject.isColliding(bullet) && !bossObject.isHurt() && !bullet.exploding && this.level.boss[0].introDone) {
                     if (this.level.shield.length === 0) {
                         bossObject.hit();
                         bullet.hit(); // Triff die Bullet und starte die Explosion
@@ -137,6 +188,20 @@ class World {
                         this.level.shield[0].hitByBullet();
                         bullet.hit(); // Triff die Bullet und starte die Explosion
                     }
+                }
+            });
+        });
+
+        this.level.rockets.forEach((rocket) => {
+            if (this.player.isColliding(rocket) && !this.player.isHurt()) {
+                this.player.hit();
+                console.log('Hit by Rocket, life:', this.player.life);
+                this.player.updateLife();
+            }
+
+            this.throwableObjects.forEach((bullet) => {
+                if (rocket.isColliding(bullet) && !bullet.exploding) {
+                    bullet.hit(); // Bullet zerstören
                 }
             });
         });
@@ -176,20 +241,25 @@ class World {
         // Zeichne Hintergrundobjekte mit Parallax-Effekt
         this.ctx.translate(this.camera_x * this.parallaxFactor, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
+
         this.addObjectsToMap(this.level.dusts);
         this.ctx.translate(-this.camera_x * this.parallaxFactor, 0); // Zurücksetzen
 
 
+
         this.ctx.translate(this.camera_x, 0);
+        this.addToMap(this.controlsIngame);
         this.addObjectsToMap(this.level.healthbar);
         this.addObjectsToMap(this.level.boss);
+        this.addObjectsToMap(this.level.beamProtection);
         this.addObjectsToMap(this.level.shield);
         this.addObjectsToMap(this.level.platforms); // Plattformen hinzufügen
         this.addObjectsToMap(this.level.groundObjects);
-
+        this.addObjectsToMap(this.level.border);
         this.ctx.translate(-this.camera_x, 0); // Back
         // ------ space for fixed objects ------- 
         this.addObjectsToMap(this.player.statusBar);
+        this.crystalCounter.draw(this.ctx); // Zeichne den Kristallzähler
         this.ctx.translate(this.camera_x, 0); // Forward
 
         this.addObjectsToMap(this.level.heartObjects);
@@ -199,7 +269,9 @@ class World {
         this.addToMap(this.player);
 
         this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.rockets);
         this.addObjectsToMap(this.throwableObjects);
+
 
 
 
@@ -239,6 +311,25 @@ class World {
     flipImgBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
+    }
+
+    
+
+    createEasterEgg(pattern, x, y) {
+        const startX = x;
+        const startY = y;
+        const gridSize = 50;
+
+    
+        for (let row = 0; row < pattern.length; row++) {
+            for (let col = 0; col < pattern[row].length; col++) {
+                if (pattern[row][col] === 'C') {
+                    this.level.crystalObjects.push(new CollectableObject(startX + col * gridSize, startY + row * gridSize, 20, 40, 'crystal'));
+                } else if (pattern[row][col] === 'H') {
+                    this.level.heartObjects.push(new CollectableObject(startX + col * gridSize, startY + row * gridSize, 28, 24, 'heart'));
+                }
+            }
+        }
     }
 
 }

@@ -17,10 +17,10 @@ class Shield extends MovableObject {
         this.width = width; // Adjust the width as needed
         this.height = height; // Adjust the height as needed
         this.animate();
-        this.offsetRight = 0;
-        this.offsetLeft = 0;
-        this.offsetTop = 0;
-        this.offsetBottom = 0;
+        this.offsetRight = 40;
+        this.offsetLeft = 40;
+        this.offsetTop = 30;
+        this.offsetBottom = 30;
     }
 
     animate() {

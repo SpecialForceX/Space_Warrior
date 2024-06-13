@@ -34,25 +34,25 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Player || this instanceof Alien || this instanceof Boss || this instanceof Shield) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
+        // if (this instanceof Player || this instanceof Alien || this instanceof Boss || this instanceof Shield) {
+        //     ctx.beginPath();
+        //     ctx.lineWidth = '5';
+        //     ctx.strokeStyle = 'blue';
+        //     ctx.rect(this.x, this.y, this.width, this.height);
+        //     ctx.stroke();
 
-            // Zeichne das rote Rechteck für den Kollisionsbereich mit den Offsets
-            const collisionX = this.x + this.offsetLeft;
-            const collisionY = this.y + this.offsetTop;
-            const collisionWidth = this.width - this.offsetLeft - this.offsetRight;
-            const collisionHeight = this.height - this.offsetTop - this.offsetBottom;
+        //     // Zeichne das rote Rechteck für den Kollisionsbereich mit den Offsets
+        //     const collisionX = this.x + this.offsetLeft;
+        //     const collisionY = this.y + this.offsetTop;
+        //     const collisionWidth = this.width - this.offsetLeft - this.offsetRight;
+        //     const collisionHeight = this.height - this.offsetTop - this.offsetBottom;
 
-            ctx.beginPath();
-            ctx.lineWidth = '2'; // Optional: dünnere Linie für das Kollisionsrechteck
-            ctx.strokeStyle = 'red';
-            ctx.rect(collisionX, collisionY, collisionWidth, collisionHeight);
-            ctx.stroke();
-        }
+        //     ctx.beginPath();
+        //     ctx.lineWidth = '2'; // Optional: dünnere Linie für das Kollisionsrechteck
+        //     ctx.strokeStyle = 'red';
+        //     ctx.rect(collisionX, collisionY, collisionWidth, collisionHeight);
+        //     ctx.stroke();
+        // }
     }
 
     isDead() {

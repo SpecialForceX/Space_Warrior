@@ -68,7 +68,7 @@ class Alien extends MovableObject {
     enableGravityFunction() {
         setTimeout(() => {
             this.applyGravity();
-        }, 100);
+        }, 500);
     }
 
 }

@@ -4,6 +4,8 @@ let world;
 let keyboard = new Keyboard();
 let gameStarted = false;
 let gamePaused = false;
+let music = true;
+let sounds = true;
 
 const menuImage = new Image();
 const playImage = new Image();
@@ -17,6 +19,10 @@ const settingsMenuSounds = new Image();
 const settingsMenuImprint = new Image();
 const settingsMenuPrivacy = new Image();
 const settingsMenuReturn = new Image();
+const soundMenuMusicOnSoundsOn = new Image();
+const soundMenuMusicOnSoundsOff = new Image();
+const soundMenuMusicOffSoundsOn = new Image();
+const soundMenuMusicOffSoundsOff = new Image();
 
 menuImage.src = 'img/menu/Menu.png';
 playImage.src = 'img/menu/Menu_play_hover.png';
@@ -26,10 +32,13 @@ controlsMenu.src = 'img/menu/controls.png';
 controlsMenuHover.src = 'img/menu/controls_hover.png';
 settingsMenu.src = 'img/menu/Settings.png';
 settingsMenuReturn.src = 'img/menu/Settings_return_hover.png';
-settingsMenuMusic.src = 'img/menu/Settings_music_hover.png';
 settingsMenuSounds.src = 'img/menu/Settings_sounds_hover.png';
 settingsMenuImprint.src = 'img/menu/Settings_imprint_hover.png';
 settingsMenuPrivacy.src = 'img/menu/Settings_privacy_hover.png';
+soundMenuMusicOnSoundsOn.src = 'img/menu/soundsOnMusicOn.png';
+soundMenuMusicOnSoundsOff.src = 'img/menu/soundsOffMusicOn.png';
+soundMenuMusicOffSoundsOn.src = 'img/menu/soundsOnMusicOff.png';
+soundMenuMusicOffSoundsOff.src = 'img/menu/soundsOffMusicOff.png';
 
 let currentMenu = 'main';
 
@@ -105,10 +114,9 @@ function handleControlsMenuMouseMove(x, y) {
  */
 function handleSettingsMenuMouseMove(x, y) {
     if (isWithinBounds(x, y, 770, 820, 635, 685)) drawImage(settingsMenuReturn);
-    else if (isWithinBounds(x, y, 320, 740, 275, 345)) drawImage(settingsMenuMusic);
-    else if (isWithinBounds(x, y, 320, 740, 380, 450)) drawImage(settingsMenuSounds);
-    else if (isWithinBounds(x, y, 320, 740, 485, 555)) drawImage(settingsMenuImprint);
-    else if (isWithinBounds(x, y, 320, 740, 590, 660)) drawImage(settingsMenuPrivacy);
+    else if (isWithinBounds(x, y, 320, 740, 310, 380)) drawImage(settingsMenuSounds);
+    else if (isWithinBounds(x, y, 320, 740, 427, 497)) drawImage(settingsMenuImprint);
+    else if (isWithinBounds(x, y, 320, 740, 543, 613)) drawImage(settingsMenuPrivacy);
     else drawImage(settingsMenu);
 }
 
@@ -190,14 +198,13 @@ function handleSettingsMenuClick(x, y) {
         currentMenu = 'main';
         drawImage(menuImage);
         clickSound.play();
-    } else if (isWithinBounds(x, y, 320, 740, 275, 345)) {
+    } else if (isWithinBounds(x, y, 320, 740, 310, 380)) {
         clickSound.play();
-    } else if (isWithinBounds(x, y, 320, 740, 380, 450)) {
-        clickSound.play();
-    } else if (isWithinBounds(x, y, 320, 740, 485, 555)) {
+        showSoundMenu(); // Initialisiere und zeige das Sound-Menü
+    } else if (isWithinBounds(x, y, 320, 740, 427, 497)) {
         window.open('html/imprint.html', '_blank');
         clickSound.play();
-    } else if (isWithinBounds(x, y, 320, 740, 590, 660)) {
+    } else if (isWithinBounds(x, y, 320, 740, 543, 613)) {
         window.open('html/privacy.html', '_blank');
         clickSound.play();
     }
@@ -305,3 +312,74 @@ window.addEventListener("keyup", handleKeyUp);
 
 // Initialisieren Sie das Menü
 window.addEventListener('load', init);
+
+/**
+ * Displays the sound menu on the canvas based on the current settings.
+ */
+function showSoundMenu() {
+    currentMenu = 'sound';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (music && sounds) {
+        ctx.drawImage(soundMenuMusicOnSoundsOn, 0, 0, canvas.width, canvas.height);
+    } else if (music && !sounds) {
+        ctx.drawImage(soundMenuMusicOnSoundsOff, 0, 0, canvas.width, canvas.height);
+    } else if (!music && sounds) {
+        ctx.drawImage(soundMenuMusicOffSoundsOn, 0, 0, canvas.width, canvas.height);
+    } else {
+        ctx.drawImage(soundMenuMusicOffSoundsOff, 0, 0, canvas.width, canvas.height);
+    }
+    addSoundMenuEventListeners();
+}
+
+/**
+ * Adds event listeners for the sound menu.
+ */
+function addSoundMenuEventListeners() {
+    canvas.addEventListener('mousemove', handleSoundMenuMouseMove);
+    canvas.addEventListener('click', handleSoundMenuClick);
+}
+
+/**
+ * Removes event listeners for the sound menu.
+ */
+function removeSoundMenuEventListeners() {
+    canvas.removeEventListener('mousemove', handleSoundMenuMouseMove);
+    canvas.removeEventListener('click', handleSoundMenuClick);
+}
+
+/**
+ * Handles mouse movement events in the sound menu.
+ * @param {MouseEvent} event - The mouse event.
+ */
+function handleSoundMenuMouseMove(event) {
+    const { x, y } = getMousePos(event);
+    if (isWithinBounds(x, y, 320, 740, 310, 380)) {
+        // Update coordinates as needed
+    } else if (isWithinBounds(x, y, 320, 740, 427, 497)) {
+        // Update coordinates as needed
+    } else if (isWithinBounds(x, y, 320, 740, 543, 613)) {
+        // Update coordinates as needed
+    }
+}
+
+/**
+ * Handles click events in the sound menu.
+ * @param {MouseEvent} event - The mouse event.
+ */
+function handleSoundMenuClick(event) {
+    const { x, y } = getMousePos(event);
+    if (isWithinBounds(x, y, 320, 740, 310, 380)) {
+        sounds = !sounds;
+        clickSound.play();
+        showSoundMenu();
+    } else if (isWithinBounds(x, y, 320, 740, 427, 497)) {
+        music = !music;
+        clickSound.play();
+        showSoundMenu();
+    } else if (isWithinBounds(x, y, 770, 820, 635, 685)) {
+        clickSound.play();
+        removeSoundMenuEventListeners();
+        currentMenu = 'settings';
+        drawImage(settingsMenu);
+    };
+}

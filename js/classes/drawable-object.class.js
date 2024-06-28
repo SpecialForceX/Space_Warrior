@@ -7,12 +7,20 @@ class DrawableObject {
     height = 76;
     width = 80;
 
-
+    /**
+    * Loads an image from the given path and assigns it to the img property.
+    * @param {string} path - The path to the image file.
+    */
     loadImg(path) {
         this.img = new Image();
         this.img.src = path;
     }
 
+    /**
+    * Draws the image on the given canvas context.
+    * If the object is dead, it draws a rotating image instead.
+    * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+    */
     draw(ctx) {
         if (this.isDead()) {
             this.rotateImage(ctx); // Zeichne rotierendes Bild, wenn tot
@@ -22,8 +30,8 @@ class DrawableObject {
     }
 
     /**
-    * 
-    * @param {Array} arr - ['img1.png', 'img2.png', ...]
+    * Loads multiple images from the given array of paths into the imgCache.
+    * @param {Array<string>} arr - Array of image paths ['img1.png', 'img2.png', ...].
     */
     loadImgs(arr) {
         arr.forEach((path) => {
@@ -33,29 +41,23 @@ class DrawableObject {
         });
     }
 
-    drawFrame(ctx) {
-        // if (this instanceof Player || this instanceof Alien || this instanceof Boss || this instanceof Shield) {
-        //     ctx.beginPath();
-        //     ctx.lineWidth = '5';
-        //     ctx.strokeStyle = 'blue';
-        //     ctx.rect(this.x, this.y, this.width, this.height);
-        //     ctx.stroke();
-
-        //     // Zeichne das rote Rechteck für den Kollisionsbereich mit den Offsets
-        //     const collisionX = this.x + this.offsetLeft;
-        //     const collisionY = this.y + this.offsetTop;
-        //     const collisionWidth = this.width - this.offsetLeft - this.offsetRight;
-        //     const collisionHeight = this.height - this.offsetTop - this.offsetBottom;
-
-        //     ctx.beginPath();
-        //     ctx.lineWidth = '2'; // Optional: dünnere Linie für das Kollisionsrechteck
-        //     ctx.strokeStyle = 'red';
-        //     ctx.rect(collisionX, collisionY, collisionWidth, collisionHeight);
-        //     ctx.stroke();
-        // }
-    }
-
+    /**
+    * Checks if the object is dead based on its life property.
+    * @returns {boolean} - True if the object's life is less than or equal to 0, otherwise false.
+    */
     isDead() {
         return this.life <= 0;
+    }
+
+    /**
+    * Plays an animation by cycling through the given images.
+    * Updates the img property with the current image from the imgCache.
+    * @param {Array<string>} images - Array of image paths for the animation.
+    */
+    playAnimation(images) {
+        let i = this.currentImg % images.length;
+        let path = images[i];
+        this.img = this.imgCache[path];
+        this.currentImg++;
     }
 }

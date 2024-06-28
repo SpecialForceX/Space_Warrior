@@ -1,22 +1,28 @@
 class CrystalCounter extends DrawableObject {
+    
     constructor() {
-        super().loadImg('img/collectables/crystal_1.png'); // Das Bild des Kristalls
-        this.x = 840; // Position oben rechts
+        super().loadImg('img/collectables/crystal_1.png');
+        this.x = 840;
         this.y = 20;
         this.width = 20;
         this.height = 40;
-        this.count = 0; // Anfangszähler
+        this.count = 0;
     }
 
+    /**
+     * Increments the count of the crystal counter by one.
+     */
     increment() {
         this.count++;
     }
 
+    /**
+     * Draws the crystal counter on the given canvas context.
+     * Draws the crystal image and the count next to the crystal image.
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+     */
     draw(ctx) {
-        // Zeichne das Kristallbild
         super.draw(ctx); 
-        
-        // Zeichne den Zähler neben dem Kristallbild
         ctx.font = '36px myPixel';
         ctx.fillStyle = 'white';
         ctx.fillText('x ' + this.count + '/130', this.x + this.width + 10, this.y + this.height / 2 + 10);

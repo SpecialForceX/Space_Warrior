@@ -51,7 +51,7 @@ class Level {
         new Platform(2300, 600, 320, 256, 'img/background/ground/platform.png'),
         new Platform(2950, 600, 320, 256, 'img/background/ground/platform.png'),
 
-    ]; // Array für Plattformen
+    ];
     trampolines = [
         new Trampoline(-1270, 644),
         new Trampoline(1950, 644),
@@ -83,6 +83,11 @@ class Level {
         this.initializeMeteorites();
     }
 
+    /**
+    * Duplicates background objects to create a seamless scrolling background.
+    * @param {number} amount - The number of background objects to duplicate.
+    * @returns {Array} - An array of duplicated background objects.
+    */
     duplicateBackgroundObjects(amount) {
         let duplicateBackgroundObjectsArray = [];
         let pos_x = -2048;
@@ -94,6 +99,11 @@ class Level {
         return duplicateBackgroundObjectsArray;
     }
 
+    /**
+    * Duplicates ground objects to create a seamless scrolling ground.
+    * @param {number} amount - The number of ground objects to duplicate.
+    * @returns {Array} - An array of duplicated ground objects.
+    */
     duplicateGroundObjects(amount) {
         let duplicateGroundObjectsArray = [];
         let pos_x = -3072;
@@ -104,6 +114,9 @@ class Level {
         return duplicateGroundObjectsArray;
     }
 
+    /**
+    * Initializes meteorites in the level. Meteorites will be generated and moved periodically.
+    */
     initializeMeteorites() {
         setInterval(() => {
             if (!gameStarted || gamePaused) return; 
@@ -112,15 +125,16 @@ class Level {
             if (currentTime - this.startTime >= this.moveDuration) {
                 this.generateRandomPosX();
                 this.meteorites.push(new Meteorites(this.meteoritePosX, this.meteoritePosY));
-                this.startTime = currentTime; // Reset the start time for the next meteorite
+                this.startTime = currentTime;
             }
-
-            // Aktualisiere alle Meteoriten
             this.updateMeteorites();
         }, 1000 / 60);
 
     }
 
+    /**
+    * Updates the position of meteorites in the level.
+    */
     updateMeteorites() {
         if (!gameStarted || gamePaused) return;
         this.meteorites.forEach(meteorite => {
@@ -128,6 +142,9 @@ class Level {
         });
     }
 
+    /**
+    * Generates a random x position for meteorites based on whether a meteorite attack is occurring.
+    */
     generateRandomPosX() {
         if (this.meteoriteAttack) {
             this.meteoritePosX = Math.random() * (4500 - 3500) + 3500;
@@ -138,6 +155,9 @@ class Level {
         }
     }
 
+    /**
+    * Initializes enemies in the level.
+    */
     initializeEnemys() {
         this.enemies.push(new Alien2(2425, 310),
         new Alien(1700, 300),

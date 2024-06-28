@@ -7,6 +7,4 @@ class ControlsIngame extends DrawableObject {
         this.width = width;
         this.height = height;
     }
-
-    
 }

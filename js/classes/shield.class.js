@@ -1,4 +1,5 @@
 class Shield extends MovableObject {
+    
     IMAGES_SHIELD = [
         'img/enemys/boss/shield/shield_1.png',
         'img/enemys/boss/shield/shield_2.png',
@@ -14,8 +15,8 @@ class Shield extends MovableObject {
         this.loadImgs(this.IMAGES_SHIELD);
         this.x = x;
         this.y = y;
-        this.width = width; // Adjust the width as needed
-        this.height = height; // Adjust the height as needed
+        this.width = width;
+        this.height = height;
         this.animate();
         this.offsetRight = 40;
         this.offsetLeft = 40;
@@ -23,6 +24,9 @@ class Shield extends MovableObject {
         this.offsetBottom = 30;
     }
 
+    /**
+    * Animates the shield's status by cycling through its images.
+    */
     animate() {
         const animateIntervall = setInterval(() => {
             switch (this.shieldStatus) {
@@ -43,28 +47,30 @@ class Shield extends MovableObject {
                         world.level.shield = [];
                         clearInterval(animateIntervall);    
                     }, 1000);
-
                 break;
             }
- 
         }, 1000 / 10);
     }
 
+    /**
+    * Updates the shield's position based on the boss's position.
+    */
     updatePositionShield() {
-        this.x = world.level.boss[0].x - 30; // Adjust the position as needed
-        this.y = world.level.boss[0].y - 25; // Adjust the position as needed
+        this.x = world.level.boss[0].x - 30;
+        this.y = world.level.boss[0].y - 25;
     }
 
-
+    /**
+    * Handles the shield being hit by a bullet.
+    * Increments shield status and sets invulnerability.
+    */
     hitByBullet() {
         if (!this.isInvulnerable) {
             this.shieldStatus += 1;
             this.isInvulnerable = true;
             setTimeout(() => {
                 this.isInvulnerable = false;
-            }, 2000); // 2 Sekunden Unverwundbarkeit
+            }, 2000);
         }
     }
-
-
 }

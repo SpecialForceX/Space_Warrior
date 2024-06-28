@@ -1,0 +1,54 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/img/window.PNG');
+    background-size: cover; /* Bildgröße anpassen, um den gesamten Hintergrund abzudecken */
+    background-repeat: no-repeat; /* Hintergrundbild nicht wiederholen */
+    background-position: center center; /* Bild zentrieren */
+    background-attachment: fixed; /* Hintergrundbild fixieren */
+    margin: 0; /* Rand des body-Elements entfernen */
+    min-height: 100vh; /* Mindestens 100% der Bildschirmhöhe */
+    width: 100vw; /* 100% der Bildschirmbreite */
+    overflow-y: auto; /* Vertikales Scrollen ermöglichen */
+    overflow-x: hidden;
+    color: white;
+}
+
+body a {
+    color: white;
+}
+
+h1 {
+    font-size: 64px;
+}
+
+.main {
+    height: 100%;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: unset;
+    align-items: unset;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar Styles */
+body::-webkit-scrollbar {
+    width: 12px; /* Breite des Scrollbalkens */
+}
+
+body::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Farbe des Scrollbalken-Hintergrunds */
+    border-radius: 10px; /* Abgerundete Ecken */
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #888; /* Farbe des Scrollbalkens */
+    border-radius: 10px; /* Abgerundete Ecken */
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Farbe des Scrollbalkens bei Hover */
+}

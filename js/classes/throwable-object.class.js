@@ -21,9 +21,13 @@ class ThrowableObject extends MovableObject {
         this.direction = direction;
     }
 
+    /**
+    * Initiates the movement of the throwable object.
+    */
     shoot() {
         this.movementInterval = setInterval(() => {
-            if (!this.exploding) { // Bewege die Bullet nur, wenn sie nicht explodiert
+            if (!gameStarted || gamePaused) return;
+            if (!this.exploding) { 
                 if(this.direction === 'left') {
                     this.x -= 5;
                 } else {
@@ -33,27 +37,40 @@ class ThrowableObject extends MovableObject {
         }, 1000/60);
     }
 
+    /**
+    * Handles what happens when the object is hit.
+    * Clears movement interval, initiates explosion sequence.
+    */
     hit() {
         this.isHit = true;
         this.exploding = true;
-        clearInterval(this.movementInterval); // Stoppe die Bewegung der Bullet
+        clearInterval(this.movementInterval);
         this.explode();
     }
 
+    /**
+    * Initiates the explosion sequence.
+    * Displays explosion frames sequentially.
+    * Clears exploding flag and marks for removal after animation.
+    */
     explode() {
         let explosionFrame = 0;
         const explosionInterval = setInterval(() => {
+            if (!gameStarted || gamePaused) return;
             if (explosionFrame < this.IMAGES_EXPLODE.length) {
                 this.img = this.imgCache[this.IMAGES_EXPLODE[explosionFrame]];
                 explosionFrame++;
             } else {
                 clearInterval(explosionInterval);
-                this.exploding = false; // Beende die Explosion
-                this.markForRemoval(); // Markiere die Bullet zur Entfernung
+                this.exploding = false;
+                this.markForRemoval();
             }
         }, 1000 / 20);
     }
 
+    /**
+    * Marks the object for removal from the game.
+    */
     markForRemoval() {
         this.isMarkedForRemoval = true;
     }

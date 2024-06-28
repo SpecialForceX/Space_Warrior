@@ -17,8 +17,12 @@ class Rocket extends MovableObject {
         this.animate();
     }
 
+    /**
+    * Animates the rocket by moving it horizontally and playing its animation.
+    */
     animate() {
         setInterval(() => {
+            if (!gameStarted || gamePaused) return;
             this.x -= this.speedX; // Bewege die Rakete nach links
             this.playAnimation(this.IMAGES); // Spiele die Raketen-Animation ab
         }, 1000 / 60); // Aktualisiere die Position 60 mal pro Sekunde

@@ -13,7 +13,11 @@ class MovableObject extends DrawableObject {
     offsetLeft = 0;
     offsetRight = 0;
 
-
+    /**
+    * Creates duplicate life objects (status bars) for the movable object.
+    * @param {number} life - Number of life objects to duplicate.
+    * @returns {Array} - Array of StatusBar objects representing life bars.
+    */
     duplicateLifeObjects(life) {
         let duplicateLifeObjectsArray = [];
         let pos_x = 20;
@@ -25,21 +29,28 @@ class MovableObject extends DrawableObject {
         return duplicateLifeObjectsArray;
     }
 
+    /**
+    * Applies gravity to the movable object, making it fall when not standing on a platform.
+    */
     applyGravity() {
         setInterval(() => {
+            if (!gameStarted || gamePaused) return;
             if (this.isAlive) {
                 if (this.isInAir() || this.speedY > 0) {
                     this.y -= this.speedY;
                     this.speedY -= this.acceleration;
                     this.y = Math.round(this.y);
                 } else {
-                    // Wenn der Spieler nicht in der Luft ist, setze die Vertikalgeschwindigkeit auf 0
                     this.speedY = 0;
                 }
             }
         }, 1000 / 60);
     }
     
+    /**
+    * Checks if the object is in the air (not standing on any platform).
+    * @returns {boolean} - True if the object is in the air, false otherwise.
+    */
     isInAir() {
         for (let platform of world.level.platforms) {
             if (this.isStandingOn(platform)) {
@@ -49,23 +60,34 @@ class MovableObject extends DrawableObject {
         return Math.round(this.y) < 635;
     }
     
-
+    /**
+    * Checks if the object is standing on a given platform.
+    * @param {Platform} platform - The platform object to check against.
+    * @returns {boolean} - True if the object is standing on the platform, false otherwise.
+    */
     isStandingOn(platform) {
         const objFeetY = this.y + this.height - this.offsetY;
         return this.x + this.width > platform.x && this.x < platform.x + platform.width &&
-               objFeetY >= platform.y && objFeetY <= platform.y + 16; // Nur die obersten 6 Pixel
+               objFeetY >= platform.y && objFeetY <= platform.y + 16; 
     }
 
+    /**
+    * Rotates the image of the object around its center.
+    * @param {CanvasRenderingContext2D} ctx - The rendering context to draw the rotated image.
+    */
     rotateImage(ctx) {
         ctx.save();
-        ctx.translate(this.x + this.width / 2, this.y + this.height / 2); // Mitte des Bildes
-        ctx.rotate(this.rotationAngle * Math.PI / 180); // Rotationswinkel
-        ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height); // Zeichne Bild um den neuen Ursprung
+        ctx.translate(this.x + this.width / 2, this.y + this.height / 2); 
+        ctx.rotate(this.rotationAngle * Math.PI / 180); 
+        ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height); 
         ctx.restore();
     }
 
-
-
+    /**
+    * Checks if this object is colliding with another object.
+    * @param {MovableObject} obj - The other movable object to check collision against.
+    * @returns {boolean} - True if there is a collision, false otherwise.
+    */
     isColliding(obj) {
         return  (this.x + this.width - this.offsetRight) >= (obj.x + obj.offsetLeft) && 
         (this.x + this.offsetLeft) <= (obj.x + obj.width - obj.offsetRight) && 
@@ -73,6 +95,9 @@ class MovableObject extends DrawableObject {
         (this.y + this.offsetTop) <= (obj.y + obj.height - obj.offsetBottom); 
     }
 
+    /**
+    * Reduces the life of the object when hit and updates its state.
+    */
     hit() {
         this.life -= 1;
         if (this.life <= 0) {
@@ -83,42 +108,48 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+    * Checks if the object is currently in a hurt state (recently hit).
+    * @returns {boolean} - True if the object is in a hurt state, false otherwise.
+    */
     isHurt() {
         let timePassed = new Date().getTime() - this.lastHit;
         timePassed = timePassed / 1000;
         return timePassed < 1;
     }
 
-    
-
+    /**
+    * Moves the object to the right.
+    */
     moveRight() {
         if (this.isAlive) {
             this.x += this.speed; 
         }
     };
 
+    /**
+    * Moves the object to the left.
+    */
     moveLeft() {
         if (this.isAlive) {
             this.x -= this.speed;
         }
     }
 
-    playAnimation(images) {
-        let i = this.currentImg % images.length;
-        let path = images[i];
-        this.img = this.imgCache[path];
-        this.currentImg++;
-    }
-
+    /**
+    * Makes the object jump by setting its vertical speed.
+    */
     jump() {
         this.speedY = 12;
     }
 
-    // Methode zum Aktualisieren des Rotationswinkels
+    /**
+    * Updates the rotation angle of the object for animation.
+    */
     updateRotation() {
-        this.rotationAngle += 5; // Geschwindigkeit der Rotation
+        this.rotationAngle += 5;
         if (this.rotationAngle >= 360) {
-            this.rotationAngle = 0; // Zurücksetzen nach einer vollen Umdrehung
+            this.rotationAngle = 0;
         }
     }
 }

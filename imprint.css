@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/img/window.PNG');
+    background-size: cover; /* Bildgröße anpassen, um den gesamten Hintergrund abzudecken */
+    background-repeat: no-repeat; /* Hintergrundbild nicht wiederholen */
+    background-position: center center; /* Bild zentrieren */
+    margin: 0; /* Rand des body-Elements entfernen */
+    height: 100vh; /* 100% der Bildschirmhöhe */
+    width: 100vw; /* 100% der Bildschirmbreite */
+}
+
+h1 {
+    font-size: 64px;
+}
+
+.main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: unset;
+    align-items: center;
+}

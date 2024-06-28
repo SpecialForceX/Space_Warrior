@@ -11,17 +11,28 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    background-image: url('/img/window.PNG');
+    background-size: cover; /* Bildgröße anpassen, um den gesamten Hintergrund abzudecken */
+    background-repeat: no-repeat; /* Hintergrundbild nicht wiederholen */
+    background-position: center center; /* Bild zentrieren */
+    margin: 0; /* Rand des body-Elements entfernen */
+    height: 100vh; /* 100% der Bildschirmhöhe */
+    width: 100vw; /* 100% der Bildschirmbreite */
 }
+
 
 h1 {
     display: flex;
     justify-content: center;
+    font-size: 64px;
 }
 
 canvas {
     background-color: black;
     width: 1024px;
     height: 768px;
+    border-radius: 32px;
     cursor: url('/img/cursor/cursor.png'), auto;
 }
 

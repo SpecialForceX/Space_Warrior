@@ -23,7 +23,6 @@ class Alien2 extends MovableObject {
     rocketShoot = false;
     life = 3;
 
-
     constructor(x, y) {
         super().loadImg('img/enemys/alien2/Alien2_1.png');
         this.loadImgs(this.IMAGES_SHOOT);
@@ -36,28 +35,33 @@ class Alien2 extends MovableObject {
         this.animateRotation();
     }
 
+    /**
+     * Starts the animations for the alien.
+     * Sets up periodic shooting animation and hurt animation.
+     */
     startAlien2() {
         setTimeout(() => {
             this.animate();  
         }, 1000);
     }
 
+    /**
+     * Sets up periodic animations for the alien.
+     * Plays shooting animation and hurt animation based on game state.
+     */
     animate() {
+        if (!this.isAlive || !gameStarted || gamePaused) return;
         const playAnimationWithRandomInterval = () => {
+            if (!gameStarted || gamePaused) return;
             if (this.isDead()) {
                 this.isAlive = false;
             } else if (this.isAlive) {
                 this.playAnimationOnce(this.IMAGES_SHOOT);
             }
-
-            // Nächstes zufälliges Intervall zwischen 2 und 5 Sekunden
             const randomInterval = Math.random() * 3000 + 2000;
             setTimeout(playAnimationWithRandomInterval, randomInterval);
         };
-
-        // Starten der Animation
         playAnimationWithRandomInterval();
-
         setInterval(() => {
             if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
@@ -65,7 +69,10 @@ class Alien2 extends MovableObject {
         }, 1000 / 15);
     }
 
-    // Methode zum einmaligen Abspielen der Animation
+     /**
+     * Plays an animation once using provided images.
+     * @param {string[]} images - Array of image paths for the animation.
+     */
     playAnimationOnce(images) {
         let currentImageIndex = 0;
         const interval = setInterval(() => {
@@ -75,24 +82,35 @@ class Alien2 extends MovableObject {
                 if (!this.rocketShoot) {
                     this.rocketShoot = true;
                     setTimeout(() => {
-                        this.shootRocket(); // Rakete abfeuern
+                        this.shootRocket();
                     }, 500);
                 }
-
             } else {
                 clearInterval(interval);
                 this.rocketShoot = false;
             }
-        }, 1000 / 7); // Geschwindigkeit der einzelnen Frames (7 Bilder pro Sekunde)
+        }, 1000 / 7);
     }
 
+    /**
+     * Fires a rocket from the alien.
+     * Creates a new Rocket object and adds it to the game level.
+     */
     shootRocket() {
-        const rocket = new Rocket(this.x - 75, this.y + 95); // Erstelle eine neue Rakete
-        world.level.rockets.push(rocket); // Füge die Rakete zum Level hinzu
+        if (!gameStarted || gamePaused) return;
+        if (world.level.enemies.length > 0) {
+            const rocket = new Rocket(this.x - 75, this.y + 95);
+            world.level.rockets.push(rocket);
+        }
     }
 
+    /**
+     * Sets up periodic animation for the alien's rotation when dead.
+     * Moves the alien upward and updates rotation if dead.
+     */
     animateRotation() {
         setInterval(() => {
+            if (!gameStarted || gamePaused) return;
             if (this.isDead()) {
                 this.updateRotation();
                 this.y -= 2;

@@ -2,6 +2,7 @@ class Platform extends MovableObject{
 
     width = 320;
     height = 256;
+    
     constructor(x, y, width, height, imgPath) {
         super();
         this.x = x;

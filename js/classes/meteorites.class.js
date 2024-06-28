@@ -20,8 +20,8 @@ class Meteorites extends MovableObject {
 
     width = 64;
     height = 64;
-    speedX = -2; // Geschwindigkeit nach links
-    speedY = 3; // Geschwindigkeit nach unten
+    speedX = -2;
+    speedY = 3;
     isExploding = false;
 
     constructor(x, y) {
@@ -37,14 +37,21 @@ class Meteorites extends MovableObject {
         this.offsetBottom = 20;
     }
 
+    /**
+    * Initiates the animation cycle of the meteorite.
+    */
     animate() {
         setInterval(() => {
+            if (!gameStarted || gamePaused) return;
             if (!this.isExploding) {
                 this.playAnimation(this.IMAGES_FLY);
             }
         }, 1000 / 10)
     }
 
+    /**
+    * Moves the meteorite based on its speed and handles collision detection.
+    */
     move() {
         if (!gameStarted || gamePaused) return; 
         this.x += this.speedX;
@@ -58,15 +65,22 @@ class Meteorites extends MovableObject {
         }
     }
 
+    /**
+    * Checks if the meteorite has touched the ground.
+    * @returns {boolean} - True if the meteorite is touching the ground, false otherwise.
+    */
     isTouchingGround() {
-        return Math.round(this.y) > 670; // Beispielwert für Bodenniveau, anpassen entsprechend Ihrer Spielwelt
+        return Math.round(this.y) > 670;
     }
 
-
+    /**
+    * Checks if the meteorite has collided with the player.
+    * @returns {boolean} - True if the meteorite has collided with the player, false otherwise.
+    */
     isTouchingPlayer() {
         if (this.isColliding(world.player) && !world.player.isHurt()) {
             world.player.hit();
-            console.log('Collision with Player, life:', world.player.life);
+            world.playPlayerHitSound();
             world.player.statusBar = [];
             world.player.updateLife();
             return true;
@@ -74,6 +88,9 @@ class Meteorites extends MovableObject {
         return false;
     }
 
+    /**
+    * Removes the meteorite from the game.
+    */
     remove() {
         const index = world.level.meteorites.indexOf(this);
         if (index > -1) {
@@ -81,6 +98,9 @@ class Meteorites extends MovableObject {
         }
     }
 
+    /**
+    * Initiates the explosion animation of the meteorite.
+    */
     exploding() {
         let explosionIndex = 0;
         const explosionInterval = setInterval(() => {
@@ -89,9 +109,9 @@ class Meteorites extends MovableObject {
                 explosionIndex++;
             } else {
                 clearInterval(explosionInterval);
-                this.remove(); // Entferne den Meteorit nach der Explosion
+                this.remove();
             }
-        }, 1000 / 30); // Zeitintervall zwischen den Bildern der Explosion
+        }, 1000 / 30);
     }
     
 }

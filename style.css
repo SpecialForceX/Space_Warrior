@@ -13,14 +13,21 @@ body {
     align-items: center;
     justify-content: center;
     background-image: url('/img/window.PNG');
-    background-size: cover; /* Bildgröße anpassen, um den gesamten Hintergrund abzudecken */
-    background-repeat: no-repeat; /* Hintergrundbild nicht wiederholen */
-    background-position: center center; /* Bild zentrieren */
-    margin: 0; /* Rand des body-Elements entfernen */
-    height: 100vh; /* 100% der Bildschirmhöhe */
-    width: 100vw; /* 100% der Bildschirmbreite */
+    background-size: cover;
+    /* Bildgröße anpassen, um den gesamten Hintergrund abzudecken */
+    background-repeat: no-repeat;
+    /* Hintergrundbild nicht wiederholen */
+    background-position: center center;
+    /* Bild zentrieren */
+    margin: 0;
+    /* Rand des body-Elements entfernen */
+    height: 100vh;
+    /* 100% der Bildschirmhöhe */
+    width: 100vw;
+    /* 100% der Bildschirmbreite */
+    overflow: hidden;
+    /* Verhindert Scrollbalken */
 }
-
 
 h1 {
     display: flex;
@@ -30,9 +37,237 @@ h1 {
 
 canvas {
     background-color: black;
+    border-radius: 32px;
+    cursor: url('/img/cursor/cursor.png'), auto;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+}
+
+#fullscreen {
     width: 1024px;
     height: 768px;
-    border-radius: 32px;
+    position: relative;
+}
+
+.screen-button {
+    position: absolute;
+    top: 85%;
+    right: 1%;
+    width: 13%;
+    height: 14%;
+    z-index: 1000;
+}
+
+.touch-button {
+    position: absolute;
+    width: 13%;
+    height: 14%;
+    z-index: 1000;
+}
+
+#moveLeftButton {
+    bottom: 3%;
+    left: 3%;
+}
+
+#moveRightButton {
+    bottom: 3%;
+    left: 17%;
+}
+
+#jumpButton {
+    bottom: 3%;
+    right: 17%;
+}
+
+#shootButton {
+    bottom: 3%;
+    right: 3%;
+}
+
+#playButton,
+#settingsButton,
+#controlsButton,
+#soundsButton,
+#imprintButton,
+#privacyButton,
+#backButton,
+#soundEffectsButton,
+#musicButton,
+#soundEffectsHaken,
+#musicHaken {
+    position: absolute;
     cursor: url('/img/cursor/cursor.png'), auto;
 }
 
+#playButton {
+    top: 39%;
+    left: 30%;
+}
+
+#playButton:hover {
+    content: url('/img/menu/play_button_hover.png');
+}
+
+#settingsButton {
+    top: 54%;
+    left: 30%;
+}
+
+#settingsButton:hover {
+    content: url('/img/menu/setting_button_hover.png');
+}
+
+#controlsButton {
+    top: 69%;
+    left: 30%;
+}
+
+#controlsButton:hover {
+    content: url('/img/menu/control_button_hover.png');
+}
+
+#soundsButton {
+    top: 39%;
+    left: 30%;
+}
+
+#soundsButton:hover {
+    content: url('/img/menu/sound_button_hover.png');
+}
+
+#imprintButton {
+    top: 54%;
+    left: 30%;
+}
+
+#imprintButton:hover {
+    content: url('/img/menu/imprint_button_hover.png');
+}
+
+#privacyButton {
+    top: 69%;
+    left: 30%;
+}
+
+#privacyButton:hover {
+    content: url('/img/menu/privacy_button_hover.png');
+}
+
+#backButton {
+    bottom: 11%;
+    right: 21%;
+}
+
+#backButton:hover {
+    content: url('/img/menu/back_button_hover.png');
+}
+
+#soundEffectsButton {
+    top: 42%;
+    left: 31%;
+}
+
+#soundEffectsButton:hover {
+    content: url('/img/menu/soundEffects_button_hover.png');
+}
+
+#musicButton {
+    top: 59%;
+    left: 31%;
+}
+
+#musicButton:hover {
+    content: url('/img/menu/music_button_hover.png');
+}
+
+#soundEffectsHaken {
+    top: 42%;
+    left: 64%;
+}
+
+#musicHaken {
+    top: 59%;
+    left: 64%;
+}
+
+.display-none {
+    display: none;
+}
+
+.landscape {
+    display: none;
+    width: 100%;
+    top: 0;
+    cursor: url(/img/cursor/cursor.png), auto;
+    border-radius: 30px;
+}
+
+/* Smartphones */
+@media only screen and (max-width: 1024px) {
+    #fullscreen {
+        width: 100%;
+        height: auto;
+    }
+
+    canvas {
+        width: 100%;
+        height: auto;
+    }
+
+    #playButton,
+    #settingsButton,
+    #controlsButton,
+    #soundsButton,
+    #imprintButton,
+    #privacyButton {
+        width: 43%;
+    }
+
+    #backButton {
+        width: 3%;
+    }
+
+    #soundEffectsHaken,
+    #musicHaken {
+        width: 8%;
+    }
+
+    #soundEffectsButton,
+    #musicButton {
+        width: 27%;
+    }
+
+}
+
+@media only screen and (max-height: 768px) {
+    #fullscreen {
+        height: 100vh;
+        width: auto;
+    }
+
+    canvas {
+        height: 100%;
+        width: auto;
+    }
+
+    #playButton,
+    #settingsButton,
+    #controlsButton,
+    #soundsButton,
+    #imprintButton,
+    #privacyButton {
+        width: 43%;
+    }
+
+}
+
+@media (max-width: 450px) {
+    .landscape {
+        display: flex;
+        position: absolute;
+    }
+}

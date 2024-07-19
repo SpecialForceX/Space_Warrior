@@ -40,8 +40,34 @@
 <body onload="init()">
 
     <div id="fullscreen">
-        <!-- <h1>Space Warrior</h1> -->
         <canvas id="canvas" width="1024px" height="768px"></canvas>
+        <img onclick="startGame()" id="playButton" src="img/menu/play_button.png" alt="Play">
+        <img onclick="showSettings()" id="settingsButton" src="img/menu/setting_button.png" alt="Settings">
+        <img onclick="showControls()" id="controlsButton" src="img/menu/control_button.png" alt="Controls">
+
+        <img class="display-none" id="soundsButton" src="img/menu/sound_button.png" alt="Sounds" onclick="showSoundMenu()">
+        <img class="display-none" id="imprintButton" src="img/menu/imprint_button.png" alt="Imprint" onclick="openImprintPage()">
+        <img class="display-none" id="privacyButton" src="img/menu/privacy_button.png" alt="Privacy" onclick="openPrivacyPage()">
+
+        <img class="display-none" id="backButton" src="img/menu/back_button.png" alt="Back" onclick="showMenu()">
+
+        <!-- Sound Menu -->
+        <img class="display-none" id="soundMenu" src="img/menu/sound_menu.png" alt="Sound Menu">
+        <img class="display-none" id="soundEffectsButton" src="img/menu/soundEffects_button.png" alt="Sound Effects" onclick="toggleSoundEffects()">
+        <img class="display-none" id="musicButton" src="img/menu/music_button.png" alt="Music" onclick="toggleMusic()">
+        <img class="display-none" id="soundEffectsHaken" src="img/menu/haken_selected.png" alt="Sound Effects Selected">
+        <img class="display-none" id="musicHaken" src="img/menu/haken_selected.png" alt="Music Selected">
+
+        <img class="landscape" src="img/menu/landscape.png" alt="landscape">
+
+        <!-- Touch Buttons for Mobile -->
+        <img id="moveLeftButton" class="touch-button display-none" src="img/mobile/mobile_left.png" alt="Move Left">
+        <img id="moveRightButton" class="touch-button display-none" src="img/mobile/mobile_right.png" alt="Move Right">
+        <img id="jumpButton" class="touch-button display-none" src="img/mobile/mobile_jump.png" alt="Jump">
+        <img id="shootButton" class="touch-button display-none" src="img/mobile/mobile_shoot.png" alt="Shoot">
+
+        <!-- <img onclick="startFullscreen()" id="fullscreenButton" class="screen-button" src="img/fullscreen/vollbild_button.png" alt="fullscreen">
+        <img id="smallscreenButton" class="screen-button display-none" src="img/fullscreen/kleinesbild_button.png" alt="smallscreen"> -->
     </div>
 
 </body>

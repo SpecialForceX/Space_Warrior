@@ -128,7 +128,7 @@ class Player extends MovableObject {
                 this.playJumpSound();
             }
             if (!world.cameraFixed) {
-                this.world.camera_x = -this.x + 200;
+                this.world.camera_x = -this.x + 400;
             }
         }, 1000 / 60);
     }

@@ -587,6 +587,7 @@ class World {
                 this.level.trampolines.push(new Trampoline(3310, 644));
                 this.level.boss.push(new Boss(3650, 800, 380, 415));
                 this.level.healthbar.push(new StatusBar(3500, 100, 624, 56, 'boss'));
+                playMusic('bossMusic');
             }
             this.bossRoomSet = true;
         }

@@ -1,47 +1,47 @@
 class Player extends MovableObject {
 
     IMAGES_WALKING = [
-        '/img/player/walk/player_walk_1.png',
-        '/img/player/walk/player_walk_2.png'
+        'img/player/walk/player_walk_1.png',
+        'img/player/walk/player_walk_2.png'
     ];
 
     IMAGES_JUMPING = [
-        '/img/player/jump/jump_1.png',
-        '/img/player/jump/jump_2.png',
-        '/img/player/jump/jump_3.png'
+        'img/player/jump/jump_1.png',
+        'img/player/jump/jump_2.png',
+        'img/player/jump/jump_3.png'
     ];
 
     IMAGES_IDLE = [
-        '/img/player/idle/player_idle_1.png',
-        '/img/player/idle/player_idle_2.png'
+        'img/player/idle/player_idle_1.png',
+        'img/player/idle/player_idle_2.png'
     ];
 
     IMAGES_DEAD = [
-        '/img/player/dead/player_dead_1.png',
-        '/img/player/dead/player_dead_2.png'
+        'img/player/dead/player_dead_1.png',
+        'img/player/dead/player_dead_2.png'
     ];
 
     IMAGES_HURT = [
-        '/img/player/hurt/player_hurt_1.png',
-        '/img/player/hurt/player_hurt_2.png'
+        'img/player/hurt/player_hurt_1.png',
+        'img/player/hurt/player_hurt_2.png'
     ];
 
     IMAGES_SHOOT = [
-        '/img/player/shoot/player_shoot_1.png',
-        '/img/player/shoot/player_shoot_2.png',
-        '/img/player/shoot/player_shoot_3.png',
-        '/img/player/shoot/player_shoot_4.png'
+        'img/player/shoot/player_shoot_1.png',
+        'img/player/shoot/player_shoot_2.png',
+        'img/player/shoot/player_shoot_3.png',
+        'img/player/shoot/player_shoot_4.png'
     ];
 
     IMAGES_SLEEP = [
-        '/img/player/sleep/sleep_1.png',
-        '/img/player/sleep/sleep_1.png',
-        '/img/player/sleep/sleep_1.png',
-        '/img/player/sleep/sleep_2.png',
-        '/img/player/sleep/sleep_2.png',
-        '/img/player/sleep/sleep_1.png',
-        '/img/player/sleep/sleep_1.png',
-        '/img/player/sleep/sleep_1.png'
+        'img/player/sleep/sleep_1.png',
+        'img/player/sleep/sleep_1.png',
+        'img/player/sleep/sleep_1.png',
+        'img/player/sleep/sleep_2.png',
+        'img/player/sleep/sleep_2.png',
+        'img/player/sleep/sleep_1.png',
+        'img/player/sleep/sleep_1.png',
+        'img/player/sleep/sleep_1.png'
     ];
 
     speed = 4;
@@ -52,7 +52,7 @@ class Player extends MovableObject {
     deathSoundPlayed = false;
 
     constructor() {
-        super().loadImg('/img/player/walk/player_walk_1.png');
+        super().loadImg('img/player/walk/player_walk_1.png');
         this.loadImgs(this.IMAGES_WALKING);
         this.loadImgs(this.IMAGES_JUMPING);
         this.loadImgs(this.IMAGES_IDLE);

@@ -4,9 +4,9 @@ class Alien extends MovableObject {
     life = 2;
 
     IMAGES_WALKING = [
-        '/img/enemys/alien1/alien_walk_1.png',
-        '/img/enemys/alien1/alien_walk_2.png',
-        '/img/enemys/alien1/alien_walk_3.png'
+        'img/enemys/alien1/alien_walk_1.png',
+        'img/enemys/alien1/alien_walk_2.png',
+        'img/enemys/alien1/alien_walk_3.png'
     ]
 
     IMAGES_HURT = [
@@ -16,7 +16,7 @@ class Alien extends MovableObject {
     ]
 
     constructor(x, y) {
-        super().loadImg('/img/enemys/alien1/alien_walk_1.png');
+        super().loadImg('img/enemys/alien1/alien_walk_1.png');
         this.loadImgs(this.IMAGES_WALKING);
         this.loadImgs(this.IMAGES_HURT);
         this.x = x;

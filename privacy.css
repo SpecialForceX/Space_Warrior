@@ -3,7 +3,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('/img/window.PNG');
+    background-image: url('img/window.PNG');
     background-size: cover; /* Bildgröße anpassen, um den gesamten Hintergrund abzudecken */
     background-repeat: no-repeat; /* Hintergrundbild nicht wiederholen */
     background-position: center center; /* Bild zentrieren */

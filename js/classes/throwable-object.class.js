@@ -5,15 +5,15 @@ class ThrowableObject extends MovableObject {
     exploding = false;
 
     IMAGES_EXPLODE = [
-        '/img/player/bullet/explosion_1.png',
-        '/img/player/bullet/explosion_2.png',
-        '/img/player/bullet/explosion_3.png',
-        '/img/player/bullet/explosion_4.png',
-        '/img/player/bullet/explosion_5.png'
+        'img/player/bullet/explosion_1.png',
+        'img/player/bullet/explosion_2.png',
+        'img/player/bullet/explosion_3.png',
+        'img/player/bullet/explosion_4.png',
+        'img/player/bullet/explosion_5.png'
     ]
 
     constructor(x, y, direction) {
-        super().loadImg('/img/player/bullet/bullet.png');
+        super().loadImg('img/player/bullet/bullet.png');
         this.loadImgs(this.IMAGES_EXPLODE);
         this.x = x;
         this.y = y;

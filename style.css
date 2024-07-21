@@ -1,6 +1,6 @@
 @font-face {
     font-family: myPixel;
-    src: url(/fonts/Tiny5/Tiny5-Regular.ttf);
+    src: url(fonts/Tiny5/Tiny5-Regular.ttf);
 }
 
 * {
@@ -12,21 +12,43 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('/img/window.PNG');
+    background-image: url('img/window.PNG');
     background-size: cover;
-    /* Bildgröße anpassen, um den gesamten Hintergrund abzudecken */
     background-repeat: no-repeat;
-    /* Hintergrundbild nicht wiederholen */
     background-position: center center;
-    /* Bild zentrieren */
     margin: 0;
-    /* Rand des body-Elements entfernen */
     height: 100vh;
-    /* 100% der Bildschirmhöhe */
     width: 100vw;
-    /* 100% der Bildschirmbreite */
     overflow: hidden;
-    /* Verhindert Scrollbalken */
+}
+
+.startScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    z-index: 100;
+    background-image: url('img/window.PNG');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+.startScreen h1 {
+    margin-top: 100px;
+}
+
+.startScreen button {
+    width: 20%;
+    height: 5%;
+    border-radius: 16px;
+    font-size: 24px;
 }
 
 h1 {
@@ -38,7 +60,7 @@ h1 {
 canvas {
     background-color: black;
     border-radius: 32px;
-    cursor: url('/img/cursor/cursor.png'), auto;
+    cursor: url('img/cursor/cursor.png'), auto;
     display: block;
     max-width: 100%;
     max-height: 100%;
@@ -52,13 +74,14 @@ canvas {
     position: relative;
 }
 
-.screen-button {
+.music-button {
     position: absolute;
-    top: 85%;
-    right: 1%;
-    width: 13%;
-    height: 14%;
+    top: 93%;
+    right: 2%;
+    width: 5%;
+    height: 6%;
     z-index: 1000;
+    cursor: url('img/cursor/cursor.png'), auto;
 }
 
 .touch-button {
@@ -100,7 +123,7 @@ canvas {
 #soundEffectsHaken,
 #musicHaken {
     position: absolute;
-    cursor: url('/img/cursor/cursor.png'), auto;
+    cursor: url('img/cursor/cursor.png'), auto;
 }
 
 #playButton {
@@ -109,7 +132,7 @@ canvas {
 }
 
 #playButton:hover {
-    content: url('/img/menu/play_button_hover.png');
+    content: url('img/menu/play_button_hover.png');
 }
 
 #settingsButton {
@@ -118,7 +141,7 @@ canvas {
 }
 
 #settingsButton:hover {
-    content: url('/img/menu/setting_button_hover.png');
+    content: url('img/menu/setting_button_hover.png');
 }
 
 #controlsButton {
@@ -127,7 +150,7 @@ canvas {
 }
 
 #controlsButton:hover {
-    content: url('/img/menu/control_button_hover.png');
+    content: url('img/menu/control_button_hover.png');
 }
 
 #soundsButton {
@@ -136,7 +159,7 @@ canvas {
 }
 
 #soundsButton:hover {
-    content: url('/img/menu/sound_button_hover.png');
+    content: url('img/menu/sound_button_hover.png');
 }
 
 #imprintButton {
@@ -145,7 +168,7 @@ canvas {
 }
 
 #imprintButton:hover {
-    content: url('/img/menu/imprint_button_hover.png');
+    content: url('img/menu/imprint_button_hover.png');
 }
 
 #privacyButton {
@@ -154,7 +177,7 @@ canvas {
 }
 
 #privacyButton:hover {
-    content: url('/img/menu/privacy_button_hover.png');
+    content: url('img/menu/privacy_button_hover.png');
 }
 
 #backButton {
@@ -163,7 +186,7 @@ canvas {
 }
 
 #backButton:hover {
-    content: url('/img/menu/back_button_hover.png');
+    content: url('img/menu/back_button_hover.png');
 }
 
 #soundEffectsButton {
@@ -172,7 +195,7 @@ canvas {
 }
 
 #soundEffectsButton:hover {
-    content: url('/img/menu/soundEffects_button_hover.png');
+    content: url('img/menu/music_button_hover.png');
 }
 
 #musicButton {
@@ -181,7 +204,7 @@ canvas {
 }
 
 #musicButton:hover {
-    content: url('/img/menu/music_button_hover.png');
+    content: url('img/menu/music_button_hover.png');
 }
 
 #soundEffectsHaken {
@@ -202,7 +225,7 @@ canvas {
     display: none;
     width: 100%;
     top: 0;
-    cursor: url(/img/cursor/cursor.png), auto;
+    cursor: url(img/cursor/cursor.png), auto;
     border-radius: 30px;
 }
 

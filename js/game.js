@@ -6,11 +6,13 @@ let gameStarted = false;
 let gamePaused = false;
 let music = true;
 let sounds = true;
+let currentMenu = 'main';
 
 const menuImage = new Image();
 const settingsImage = new Image();
 const controlsImage = new Image();
 const soundMenuImage = new Image();
+const clickSound = new Audio('audio/sounds/menu_click.ogg');
 
 menuImage.src = 'img/menu/Menu.png';
 settingsImage.src = 'img/menu/Settings.png';
@@ -18,9 +20,13 @@ controlsImage.src = 'img/menu/controls.png';
 soundMenuImage.src = 'img/menu/sound_menu.png';
 
 
-let currentMenu = 'main';
-
-const clickSound = new Audio('audio/sounds/menu_click.ogg');
+/**
+ * starts the game menu.
+ */
+function startGameMenu() {
+    document.getElementById('startScreen').classList.add('display-none');
+    playMusic('menuMusic');
+}
 
 /**
  * Initializes the game by setting up the canvas and showing the main menu.
@@ -41,6 +47,16 @@ function showMenu() {
     showRightButtons();
 }
 
+/**
+ * Plays a click sound.
+ */
+function playClickSound() {
+    clickSound.play();
+}
+
+/**
+ * Displays the settings menu.
+ */
 function showSettings() {
     currentMenu = 'settings';
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -48,6 +64,9 @@ function showSettings() {
     showRightButtons();
 }
 
+/**
+ * Displays the controls menu.
+ */
 function showControls() {
     currentMenu = 'controls';
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -55,6 +74,9 @@ function showControls() {
     showRightButtons();
 }
 
+/**
+ * Displays the sound menu.
+ */
 function showSoundMenu() {
     currentMenu = 'soundMenu';
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -62,22 +84,29 @@ function showSoundMenu() {
     showRightButtons();
 }
 
+/**
+ * Shows the appropriate buttons based on the current menu.
+ */
 function showRightButtons() {
-    const buttons = ['playButton', 'settingsButton', 'controlsButton', 'soundsButton', 'imprintButton', 'privacyButton', 'backButton', 'soundEffectsButton', 'musicButton', 'soundEffectsHaken', 'musicHaken'];
+    const buttons = ['playButton', 'settingsButton', 'controlsButton', 'soundsButton', 'imprintButton', 'privacyButton', 'backButton', 'soundEffectsButton', 'soundEffectsHaken'];
     buttons.forEach(button => document.getElementById(button).classList.add('display-none'));
 
     if (currentMenu === 'main') {
         ['playButton', 'settingsButton', 'controlsButton'].forEach(button => document.getElementById(button).classList.remove('display-none'));
     } else if (currentMenu === 'settings') {
         ['soundsButton', 'imprintButton', 'privacyButton', 'backButton'].forEach(button => document.getElementById(button).classList.remove('display-none'));
-    } else if (currentMenu === 'controls'){
+    } else if (currentMenu === 'controls') {
         ['backButton'].forEach(button => document.getElementById(button).classList.remove('display-none'));
     } else if (currentMenu === 'soundMenu') {
-        ['soundEffectsButton', 'musicButton', 'backButton', 'soundEffectsHaken', 'musicHaken'].forEach(button => document.getElementById(button).classList.remove('display-none'));
+        ['soundEffectsButton', 'backButton', 'soundEffectsHaken'].forEach(button => document.getElementById(button).classList.remove('display-none'));
         updateSoundButtons();
     }
+    updateMusicButtonsVisibility();
 }
 
+/**
+ * Shows or hides mobile control buttons based on screen height and game state.
+ */
 function showMobileButton() {
     if (window.innerHeight < 768 && gameStarted) {
         document.getElementById('moveLeftButton').classList.remove('display-none');
@@ -92,9 +121,11 @@ function showMobileButton() {
     }
 }
 
-// Überprüft alle 500 Millisekunden
 setInterval(showMobileButton, 500);
 
+/**
+ * Starts the game, hides the menu buttons, sets up touch controls, and plays level music.
+ */
 function startGame() {
     gameStarted = true;
     document.getElementById('playButton').classList.add('display-none');
@@ -102,35 +133,119 @@ function startGame() {
     document.getElementById('controlsButton').classList.add('display-none');
     setupTouchControls();
     showMobileButton();
+    playMusic('levelMusic');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (world) world = null;
     world = new World(canvas, keyboard);
     gamePaused = false;
+    updateMusicButtonsVisibility();
 }
 
+/**
+ * Plays the specified music track and stops all other music.
+ * @param {string} musicId - The ID of the music element to play.
+ */
+function playMusic(musicId) {
+    stopAllMusic();
+
+    const music = document.getElementById(musicId);
+    music.muted = !music;
+    music.play();
+}
+
+/**
+ * Stops all currently playing music tracks.
+ */
+function stopAllMusic() {
+    const musicElements = document.querySelectorAll('audio');
+    musicElements.forEach(music => {
+        music.pause();
+        music.currentTime = 0;
+    });
+}
+
+// Continuous check for music and sound settings
+function checkSoundSettings() {
+    const musicElements = document.querySelectorAll('audio');
+    musicElements.forEach(music => {
+        music.muted = !music && !music;
+    });
+
+    const audioElements = document.querySelectorAll('audio');
+    audioElements.forEach(audio => {
+        audio.muted = !sounds;
+    });
+}
+
+// Update sound settings every second
+setInterval(checkSoundSettings, 1000);
+
+/**
+ * Opens the imprint page in a new tab.
+ */
 function openImprintPage() {
     window.open('html/imprint.html', '_blank');
 }
 
+/**
+ * Opens the privacy page in a new tab.
+ */
 function openPrivacyPage() {
     window.open('html/privacy.html', '_blank');
 }
 
+/**
+ * Toggles sound effects on or off and updates the sound buttons.
+ */
 function toggleSoundEffects() {
     sounds = !sounds;
     updateSoundButtons();
+    const audioElements = document.querySelectorAll('audio');
+    audioElements.forEach(audio => {
+        audio.muted = !sounds;
+    });
 }
 
+/**
+ * Toggles music on or off and updates the sound buttons.
+ */
 function toggleMusic() {
     music = !music;
     updateSoundButtons();
+    const musicElements = document.querySelectorAll('audio');
+    musicElements.forEach(music => {
+        music.muted = !music;
+    });
 }
 
+/**
+ * Updates the sound buttons to reflect the current state of sound effects and music.
+ */
 function updateSoundButtons() {
     document.getElementById('soundEffectsHaken').src = sounds ? 'img/menu/haken_selected.png' : 'img/menu/haken_unselected.png';
-    document.getElementById('musicHaken').src = music ? 'img/menu/haken_selected.png' : 'img/menu/haken_unselected.png';
 }
 
+/**
+ * Updates the visibility of music buttons based on the sound settings and game state.
+ */
+function updateMusicButtonsVisibility() {
+    const musicButtonOn = document.getElementById('musicButtonOn');
+    const musicButtonOff = document.getElementById('musicButtonOff');
+
+    if (gameStarted) {
+        // Show musicOn button if sounds is true, otherwise show musicOff button
+        musicButtonOn.classList.toggle('display-none', !sounds);
+        musicButtonOff.classList.toggle('display-none', sounds);
+    } else {
+        // Hide both buttons if the game has not started
+        musicButtonOn.classList.add('display-none');
+        musicButtonOff.classList.add('display-none');
+    }
+}
+
+/**
+ * Sets up touch controls for mobile devices.
+ */
 function setupTouchControls() {
     const moveLeftButton = document.getElementById('moveLeftButton');
     const moveRightButton = document.getElementById('moveRightButton');
@@ -169,9 +284,6 @@ function setupTouchControls() {
         keyboard.ENTER = false;
     });
 }
-
-
-
 
 /**
  * Toggles the game pause state.
@@ -252,240 +364,3 @@ window.addEventListener("keyup", handleKeyUp);
 // Initialisieren Sie das Menü
 window.addEventListener('load', init);
 
-// /**
-//  * Handles mouse movement events on the canvas.
-//  * @param {MouseEvent} event - The mouse event.
-//  */
-// function handleMouseMove(event) {
-//     const { x, y } = getMousePos(event);
-//     if (currentMenu === 'main') handleMainMenuMouseMove(x, y);
-//     else if (currentMenu === 'controls') handleControlsMenuMouseMove(x, y);
-//     else if (currentMenu === 'settings') handleSettingsMenuMouseMove(x, y);
-// }
-
-// /**
-//  * Handles mouse movement events in the main menu.
-//  * @param {number} x - The x-coordinate of the mouse.
-//  * @param {number} y - The y-coordinate of the mouse.
-//  */
-// function handleMainMenuMouseMove(x, y) {
-//     if (isWithinBounds(x, y, 320, 740, 310, 380)) drawImage(playImage);
-//     else if (isWithinBounds(x, y, 320, 740, 427, 497)) drawImage(settingsImage);
-//     else if (isWithinBounds(x, y, 320, 740, 543, 613)) drawImage(controlsImage);
-//     else drawImage(menuImage);
-// }
-
-// /**
-//  * Handles mouse movement events in the controls menu.
-//  * @param {number} x - The x-coordinate of the mouse.
-//  * @param {number} y - The y-coordinate of the mouse.
-//  */
-// function handleControlsMenuMouseMove(x, y) {
-//     if (isWithinBounds(x, y, 770, 820, 635, 685)) drawImage(controlsMenuHover);
-//     else drawImage(controlsMenu);
-// }
-
-// /**
-//  * Handles mouse movement events in the settings menu.
-//  * @param {number} x - The x-coordinate of the mouse.
-//  * @param {number} y - The y-coordinate of the mouse.
-//  */
-// function handleSettingsMenuMouseMove(x, y) {
-//     if (isWithinBounds(x, y, 770, 820, 635, 685)) drawImage(settingsMenuReturn);
-//     else if (isWithinBounds(x, y, 320, 740, 310, 380)) drawImage(settingsMenuSounds);
-//     else if (isWithinBounds(x, y, 320, 740, 427, 497)) drawImage(settingsMenuImprint);
-//     else if (isWithinBounds(x, y, 320, 740, 543, 613)) drawImage(settingsMenuPrivacy);
-//     else drawImage(settingsMenu);
-// }
-
-// /**
-//  * Checks if a point is within a specified rectangular bounds.
-//  * @param {number} x - The x-coordinate of the point.
-//  * @param {number} y - The y-coordinate of the point.
-//  * @param {number} x1 - The x-coordinate of the top-left corner of the rectangle.
-//  * @param {number} x2 - The x-coordinate of the bottom-right corner of the rectangle.
-//  * @param {number} y1 - The y-coordinate of the top-left corner of the rectangle.
-//  * @param {number} y2 - The y-coordinate of the bottom-right corner of the rectangle.
-//  * @returns {boolean} True if the point is within the bounds, false otherwise.
-//  */
-// function isWithinBounds(x, y, x1, x2, y1, y2) {
-//     return x >= x1 && x <= x2 && y >= y1 && y <= y2;
-// }
-
-// /**
-//  * Draws an image on the canvas.
-//  * @param {HTMLImageElement} image - The image to draw.
-//  */
-// function drawImage(image) {
-//     ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-// }
-
-// /**
-//  * Handles click events on the canvas for menu interactions.
-//  * @param {MouseEvent} event - The mouse event.
-//  */
-// function handleMenuClick(event) {
-//     const { x, y } = getMousePos(event);
-//     if (currentMenu === 'main') handleMainMenuClick(x, y);
-//     else if (currentMenu === 'controls') handleControlsMenuClick(x, y);
-//     else if (currentMenu === 'settings') handleSettingsMenuClick(x, y);
-// }
-
-// /**
-//  * Handles click events in the main menu.
-//  * @param {number} x - The x-coordinate of the click.
-//  * @param {number} y - The y-coordinate of the click.
-//  */
-// function handleMainMenuClick(x, y) {
-//     if (isWithinBounds(x, y, 320, 740, 310, 380)) {
-//         removeMenuEventListeners();
-//         clickSound.play();
-//         startGame();
-//     } else if (isWithinBounds(x, y, 320, 740, 427, 497)) {
-//         currentMenu = 'settings';
-//         drawImage(settingsMenu);
-//         clickSound.play();
-//     } else if (isWithinBounds(x, y, 320, 740, 543, 613)) {
-//         currentMenu = 'controls';
-//         drawImage(controlsMenu);
-//         clickSound.play();
-//     }
-// }
-
-// /**
-//  * Handles click events in the controls menu.
-//  * @param {number} x - The x-coordinate of the click.
-//  * @param {number} y - The y-coordinate of the click.
-//  */
-// function handleControlsMenuClick(x, y) {
-//     if (isWithinBounds(x, y, 770, 820, 635, 685)) {
-//         currentMenu = 'main';
-//         drawImage(menuImage);
-//         clickSound.play();
-//     }
-// }
-
-// /**
-//  * Handles click events in the settings menu.
-//  * @param {number} x - The x-coordinate of the click.
-//  * @param {number} y - The y-coordinate of the click.
-//  */
-// function handleSettingsMenuClick(x, y) {
-//     if (isWithinBounds(x, y, 770, 820, 635, 685)) {
-//         currentMenu = 'main';
-//         drawImage(menuImage);
-//         clickSound.play();
-//     } else if (isWithinBounds(x, y, 320, 740, 310, 380)) {
-//         clickSound.play();
-//         showSoundMenu(); // Initialisiere und zeige das Sound-Menü
-//     } else if (isWithinBounds(x, y, 320, 740, 427, 497)) {
-//         window.open('html/imprint.html', '_blank');
-//         clickSound.play();
-//     } else if (isWithinBounds(x, y, 320, 740, 543, 613)) {
-//         window.open('html/privacy.html', '_blank');
-//         clickSound.play();
-//     }
-// }
-
-// /**
-//  * Gets the mouse position relative to the canvas.
-//  * @param {MouseEvent} event - The mouse event.
-//  * @returns {Object} The mouse position {x, y}.
-//  */
-// function getMousePos(event) {
-//     const rect = canvas.getBoundingClientRect();
-//     return {
-//         x: event.clientX - rect.left,
-//         y: event.clientY - rect.top
-//     };
-// }
-
-// /**
-//  * Removes menu event listeners from the canvas.
-//  */
-// function removeMenuEventListeners() {
-//     canvas.removeEventListener('mousemove', handleMouseMove);
-//     canvas.removeEventListener('click', handleMenuClick);
-// }
-
-// /**
-//  * Adds menu event listeners to the canvas.
-//  */
-// function addMenuEventListeners() {
-//     canvas.addEventListener('mousemove', handleMouseMove);
-//     canvas.addEventListener('click', handleMenuClick);
-// }
-
-
-
-// /**
-//  * Displays the sound menu on the canvas based on the current settings.
-//  */
-// function showSoundMenu() {
-//     currentMenu = 'sound';
-//     ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     if (music && sounds) {
-//         ctx.drawImage(soundMenuMusicOnSoundsOn, 0, 0, canvas.width, canvas.height);
-//     } else if (music && !sounds) {
-//         ctx.drawImage(soundMenuMusicOnSoundsOff, 0, 0, canvas.width, canvas.height);
-//     } else if (!music && sounds) {
-//         ctx.drawImage(soundMenuMusicOffSoundsOn, 0, 0, canvas.width, canvas.height);
-//     } else {
-//         ctx.drawImage(soundMenuMusicOffSoundsOff, 0, 0, canvas.width, canvas.height);
-//     }
-//     addSoundMenuEventListeners();
-// }
-
-// /**
-//  * Adds event listeners for the sound menu.
-//  */
-// function addSoundMenuEventListeners() {
-//     canvas.addEventListener('mousemove', handleSoundMenuMouseMove);
-//     canvas.addEventListener('click', handleSoundMenuClick);
-// }
-
-// /**
-//  * Removes event listeners for the sound menu.
-//  */
-// function removeSoundMenuEventListeners() {
-//     canvas.removeEventListener('mousemove', handleSoundMenuMouseMove);
-//     canvas.removeEventListener('click', handleSoundMenuClick);
-// }
-
-// /**
-//  * Handles mouse movement events in the sound menu.
-//  * @param {MouseEvent} event - The mouse event.
-//  */
-// function handleSoundMenuMouseMove(event) {
-//     const { x, y } = getMousePos(event);
-//     if (isWithinBounds(x, y, 320, 740, 310, 380)) {
-//         // Update coordinates as needed
-//     } else if (isWithinBounds(x, y, 320, 740, 427, 497)) {
-//         // Update coordinates as needed
-//     } else if (isWithinBounds(x, y, 320, 740, 543, 613)) {
-//         // Update coordinates as needed
-//     }
-// }
-
-// /**
-//  * Handles click events in the sound menu.
-//  * @param {MouseEvent} event - The mouse event.
-//  */
-// function handleSoundMenuClick(event) {
-//     const { x, y } = getMousePos(event);
-//     if (isWithinBounds(x, y, 320, 740, 310, 380)) {
-//         sounds = !sounds;
-//         clickSound.play();
-//         showSoundMenu();
-//     } else if (isWithinBounds(x, y, 320, 740, 427, 497)) {
-//         music = !music;
-//         clickSound.play();
-//         showSoundMenu();
-//     } else if (isWithinBounds(x, y, 770, 820, 635, 685)) {
-//         clickSound.play();
-//         removeSoundMenuEventListeners();
-//         currentMenu = 'settings';
-//         drawImage(settingsMenu);
-//     };
-// }

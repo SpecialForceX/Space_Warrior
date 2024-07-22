@@ -26,6 +26,7 @@ soundMenuImage.src = 'img/menu/sound_menu.png';
 function startGameMenu() {
     document.getElementById('startScreen').classList.add('display-none');
     playMusic('menuMusic');
+    setInitialVolume();
 }
 
 /**
@@ -35,6 +36,12 @@ function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     showMenu();
+}
+
+function setInitialVolume() {
+    document.getElementById('menuMusic').volume = 0.01;
+    document.getElementById('levelMusic').volume = 0.01;
+    document.getElementById('bossMusic').volume = 0.01;
 }
 
 /**
@@ -48,10 +55,13 @@ function showMenu() {
 }
 
 /**
- * Plays a click sound.
+ * Plays a click sound if music is enabled.
  */
 function playClickSound() {
-    clickSound.play();
+    if (sounds) {
+        clickSound.play();
+        clickSound.volume = 0.05;
+    }
 }
 
 /**
@@ -104,11 +114,12 @@ function showRightButtons() {
     updateMusicButtonsVisibility();
 }
 
-/**
- * Shows or hides mobile control buttons based on screen height and game state.
- */
+function isTouchDevice() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+}
+
 function showMobileButton() {
-    if (window.innerHeight < 768 && gameStarted) {
+    if (isTouchDevice() && window.innerWidth >= 600 && window.innerWidth <= 1368 && gameStarted) {
         document.getElementById('moveLeftButton').classList.remove('display-none');
         document.getElementById('moveRightButton').classList.remove('display-none');
         document.getElementById('jumpButton').classList.remove('display-none');
@@ -134,6 +145,7 @@ function startGame() {
     setupTouchControls();
     showMobileButton();
     playMusic('levelMusic');
+    setInitialVolume();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (world) world = null;
     world = new World(canvas, keyboard);
@@ -149,6 +161,7 @@ function playMusic(musicId) {
     stopAllMusic();
 
     const music = document.getElementById(musicId);
+    music.volume = 0.5;  // Setze die Lautstärke auf 50%
     music.muted = !music;
     music.play();
 }
@@ -166,6 +179,7 @@ function stopAllMusic() {
 
 // Continuous check for music and sound settings
 function checkSoundSettings() {
+    music.volume = 0.1;
     const musicElements = document.querySelectorAll('audio');
     musicElements.forEach(music => {
         music.muted = !music && !music;
@@ -200,10 +214,10 @@ function openPrivacyPage() {
 function toggleSoundEffects() {
     sounds = !sounds;
     updateSoundButtons();
-    const audioElements = document.querySelectorAll('audio');
-    audioElements.forEach(audio => {
-        audio.muted = !sounds;
-    });
+    if (world) {  // Check if world is defined
+        world.muted = sounds;
+        world.muteSounds();  // Call muteSounds to update sound settings
+    }
 }
 
 /**
@@ -212,10 +226,11 @@ function toggleSoundEffects() {
 function toggleMusic() {
     music = !music;
     updateSoundButtons();
-    const musicElements = document.querySelectorAll('audio');
-    musicElements.forEach(music => {
-        music.muted = !music;
-    });
+    if (world) {  // Check if world is defined
+        world.muted = music;
+        world.muteSounds();  // Call muteSounds to update sound settings
+        
+    }
 }
 
 /**
@@ -330,29 +345,6 @@ function handleKeyUp(event) {
     if (event.keyCode == 13) keyboard.ENTER = false;
 }
 
-// function startFullscreen() {
-//     let fullscreenDiv = document.getElementById('fullscreen');
-//     fullscreen(fullscreenDiv);
-// }
-
-// /**
-//  * Toggles fullscreen mode for the specified element.
-//  * @param {HTMLElement} element - The element to toggle fullscreen.
-//  */
-// function fullscreen(element) {
-//     if (element.requestFullscreen) element.requestFullscreen();
-//     else if (element.msRequestFullscreen) element.msRequestFullscreen();
-//     else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
-// }
-
-// /**
-//  * Exits fullscreen mode.
-//  */
-// function exitFullscreen() {
-//     if (document.exitFullscreen) document.exitFullscreen();
-//     else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-// }
-
 // Event-Listener für Pausen-Taste (z.B. "P")
 document.addEventListener('keydown', (event) => {
     if (event.key === 'P' || event.key === 'p') togglePause();
@@ -363,4 +355,3 @@ window.addEventListener("keyup", handleKeyUp);
 
 // Initialisieren Sie das Menü
 window.addEventListener('load', init);
-

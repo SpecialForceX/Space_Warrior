@@ -9,11 +9,13 @@
     <script src="js/classes/drawable-object.class.js"></script>
     <script src="js/classes/moveable-object.class.js"></script>
     <script src="js/classes/world.class.js"></script>
+    <script src="js/classes/world_2.js"></script>
     <script src="js/classes/alien.class.js"></script>
     <script src="js/classes/alien2.class.js"></script>
     <script src="js/classes/player.class.js"></script>
     <script src="js/classes/trampoline.class.js"></script>
     <script src="js/classes/boss.class.js"></script>
+    <script src="js/classes/boss_attack.js"></script>
     <script src="js/classes/shield.class.js"></script>
     <script src="js/classes/rocket.class.js"></script>
     <script src="js/classes/controls-ingame.class.js"></script>
@@ -41,6 +43,10 @@
     <div id="startScreen" class="startScreen">
         <h1>Space Warrior</h1>
         <button onclick="startGameMenu()">start</button>
+        <div class="footer">
+            <a href="html\imprint.html" target="_blank">Imprint</a>
+            <a href="html\privacy.html" target="_blank">Privacy</a>
+        </div>
     </div>
 
     <div id="fullscreen">
@@ -75,13 +81,20 @@
         <img id="jumpButton" class="touch-button display-none" src="img/mobile/mobile_jump.png" alt="Jump">
         <img id="shootButton" class="touch-button display-none" src="img/mobile/mobile_shoot.png" alt="Shoot">
 
-        <img onclick="toggleSoundEffects(), updateMusicButtonsVisibility()" id="musicButtonOn" class="music-button" src="img/musicButtons/musicOn.png" alt="musicOn">
-        <img onclick="toggleSoundEffects(), updateMusicButtonsVisibility()" id="musicButtonOff" class="music-button display-none" src="img/musicButtons/musicOff.png" alt="musicOff">
+        <img onclick="toggleSoundEffects(), updateMusicButtonsVisibility()" id="musicButtonOn" class="music-button"
+            src="img/musicButtons/musicOn.png" alt="musicOn">
+        <img onclick="toggleSoundEffects(), updateMusicButtonsVisibility()" id="musicButtonOff"
+            class="music-button display-none" src="img/musicButtons/musicOff.png" alt="musicOff">
 
         <!-- Audio Elements -->
         <audio id="menuMusic" src="audio/music/menu_theme.wav" preload="auto" loop></audio>
         <audio id="levelMusic" src="audio/music/level_theme.wav" preload="auto" loop></audio>
         <audio id="bossMusic" src="audio/music/boss_theme.wav" preload="auto" loop></audio>
+    </div>
+
+    <div class="footer">
+        <a href="html\imprint.html" target="_blank">Imprint</a>
+        <a href="html\privacy.html" target="_blank">Privacy</a>
     </div>
 
 </body>

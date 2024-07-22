@@ -229,6 +229,18 @@ canvas {
     border-radius: 30px;
 }
 
+.footer a {
+    color: white;
+    text-decoration: none;
+    margin-right: 32px;
+    margin-left: 32px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 8px;
+}
+
 /* Smartphones */
 @media only screen and (max-width: 1024px) {
     #fullscreen {
@@ -292,5 +304,42 @@ canvas {
     .landscape {
         display: flex;
         position: absolute;
+    }
+}
+
+/* Standardmäßig verberge die mobilen Buttons */
+.moveLeftButton, .moveRightButton, .jumpButton, .shootButton {
+    display: none;
+}
+
+/* Zeige die mobilen Buttons auf Tablets mit Touch-Unterstützung */
+@media (min-width: 600px) and (max-width: 1368px) and (pointer: coarse) {
+    .moveLeftButton, .moveRightButton, .jumpButton, .shootButton {
+        display: block;
+    }
+}
+
+@media (max-width: 376px) {
+    h1 {
+        font-size: 56px;
+    }
+
+    .landscape {
+        display: flex;
+        position: fixed;
+        height: 100vh;
+    }
+
+}
+
+@media (max-height: 430px) {
+    .startScreen button {
+        height: 9%;
+    }
+}
+
+@media (max-width: 800px) {
+    .footer {
+        display: none;
     }
 }

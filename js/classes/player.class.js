@@ -85,18 +85,23 @@ class Player extends MovableObject {
     * Plays the jump sound effect.
     */
     playJumpSound() {
-        this.jumpSound.currentTime = 0;
-        this.jumpSound.play();
+        if (!world.muted) {
+            this.jumpSound.currentTime = 0;
+            this.jumpSound.play();
+            this.jumpSound.volume = 0.01;  
+        }
     }
 
     /**
     * Plays the death sound effect if it hasn't been played yet.
     */
     playDeathSound() {
-        if (!this.deathSoundPlayed) {
-            this.deathSound.currentTime = 0;
-            this.deathSound.play();
-            this.deathSoundPlayed = true;
+        if (!world.muted) {
+            if (!this.deathSoundPlayed) {
+                this.deathSound.currentTime = 0;
+                this.deathSound.play();
+                this.deathSoundPlayed = true;
+            }
         }
     }
 
